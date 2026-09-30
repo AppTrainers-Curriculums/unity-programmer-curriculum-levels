@@ -45,7 +45,7 @@ export const levels = [
     cardTitle: 'Level 1 — Catch the Falling Blocks',
     cardDescription:
       'Your first real game: keyboard control, physics, prefabs, a score on screen, sound and a Web build to share. 11 build chapters and 6 C# Concept chapters (scope and access, classes, arrays, loops, enums and switch, text formatting), ending with practice for the Level 2 entry test.',
-    published: false,
+    published: true,
     protected: true,
     salt: 'acefee769687200f44a527e938277443',
   },

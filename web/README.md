@@ -22,8 +22,8 @@ per chapter, in the book's teaching order, and applies our conventions:
 - any other `##` after Part 0 → its own page (Part 5's questions, answers,
   cheat sheet, checklist)
 - ` ```csharp:File.cs ` fences → titled code blocks (filename tab + copy button)
-- a plain fence straight under a C# example → a **Console** box (what the
-  example prints)
+- a plain fence straight under a C# example, or introduced by a paragraph that
+  mentions the Console → a **Console** box (what the code prints)
 - `### Idea / Do it / Test it / Challenge` → icon headings
 - `**Goal:** …` → a highlighted "Goal" aside
 - `> **Tip:**` / `> **Note:**` / `> **Watch out:**` → tip / note / caution asides
@@ -103,13 +103,14 @@ an environment variable **`COURSE_PW_<SLUG>`** (slug uppercased, `-` → `_`):
 | Level     | Env var / secret    |
 | --------- | ------------------- |
 | `level-0` | `COURSE_PW_LEVEL_0` |
+| `level-1` | `COURSE_PW_LEVEL_1` |
 
 - **In CI:** add each as a GitHub **repository secret**
   (Settings → Secrets and variables → Actions → New repository secret). The
   deploy workflow runs in **strict mode** (`STATICRYPT_STRICT=1`): if a
   protected level has no password, the build **fails**, so a locked level is
   never accidentally deployed unlocked.
-- **Locally:** `COURSE_PW_LEVEL_0=… npm run build`. A missing password locally
+- **Locally:** `COURSE_PW_LEVEL_0=… COURSE_PW_LEVEL_1=… npm run build`. A missing password locally
   just skips (leaves that level unencrypted) with a warning.
 
 The `salt` per level is a fixed 32-hex string — **not secret**. It keeps builds

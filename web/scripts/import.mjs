@@ -78,11 +78,14 @@ function transform(text) {
       const file = c.lang.match(/^([A-Za-z0-9]+):(.+)$/);
       if (file) open = `\`\`\`${file[1]} title="${file[2].trim()}"`;
 
-      // A plain block straight under a C# example is what the Console prints
-      // when it runs (the PDF's grey box). Anything else plain is a diagram.
-      const before = parts[i - 2];
-      const onlyBlankBetween = !parts[i - 1]?.prose.trim();
-      if (!c.lang && onlyBlankBetween && before?.lang?.startsWith('csharp')) {
+      // A plain block is what the Console prints (the PDF's grey box) when it
+      // sits straight under a C# example, or when the paragraph introducing it
+      // says so ("The Console shows this message."). Anything else plain is a
+      // diagram, or text on the game screen.
+      const prose = parts[i - 1].prose;
+      const underCsharp = !prose.trim() && parts[i - 2]?.lang?.startsWith('csharp');
+      const saysConsole = /\bConsole\b/.test(prose.trim().split(/\n\s*\n/).pop());
+      if (!c.lang && (underCsharp || saysConsole)) {
         open = '```text title="Console" frame="terminal"';
       }
       return [open, ...c.lines, '```'].join('\n');

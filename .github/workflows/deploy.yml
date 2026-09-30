@@ -54,6 +54,7 @@ jobs:
           # Settings → Secrets and variables → Actions → New repository secret.
           # One secret per protected level, named COURSE_PW_<SLUG>.
           COURSE_PW_LEVEL_0: ${{ secrets.COURSE_PW_LEVEL_0 }}
+          COURSE_PW_LEVEL_1: ${{ secrets.COURSE_PW_LEVEL_1 }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
