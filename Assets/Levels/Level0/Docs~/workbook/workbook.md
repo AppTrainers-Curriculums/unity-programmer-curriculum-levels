@@ -128,7 +128,7 @@ book:
 
 ## One-time project setup
 
-- **Unity 6**, with a project created from the **2D (URP)** template. The scene
+- **Unity 6**, with a project created from the **Universal 2D** template. The scene
   it starts with already has a **Global Light 2D**: keep it, because without a
   light, sprites in a URP 2D scene render black.
 - A code editor: **Visual Studio Code** (with the **Unity** extension) or

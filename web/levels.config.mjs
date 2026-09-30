@@ -36,6 +36,19 @@ export const levels = [
     protected: true,
     salt: '5e2e2eed7d0648be1a353b3acb2de822',
   },
+  {
+    slug: 'level-1',
+    src: 'Assets/Levels/Level1/Docs~/workbook/workbook.md',
+    shortName: 'Level 1',
+    introTitle: 'Before You Start',
+    sidebarLabel: 'Level 1 — Catch the Falling Blocks',
+    cardTitle: 'Level 1 — Catch the Falling Blocks',
+    cardDescription:
+      'Your first real game: keyboard control, physics, prefabs, a score on screen, sound and a Web build to share. 11 build chapters and 6 C# Concept chapters (scope and access, classes, arrays, loops, enums and switch, text formatting), ending with practice for the Level 2 entry test.',
+    published: false,
+    protected: true,
+    salt: 'acefee769687200f44a527e938277443',
+  },
 ];
 
 export const publishedLevels = levels.filter((l) => l.published);

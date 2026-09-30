@@ -10,7 +10,7 @@ The student book (`Docs/Level0-RocketLaunch-Workbook.pdf`) is already written. *
 
 - **Audience:** complete beginners (never coded, never opened Unity), 18+.
 - **Level 0 purpose:** first C# code and first Unity scene. A rocket counts down, launches, climbs through stages and ends in orbit or out of fuel. There are **no player controls**; the student is the programmer, not the pilot.
-- **Engine:** Unity 6, **2D (URP)** project (2D Renderer). The scene is 2D: coloured sprites, an orthographic camera and a Global Light 2D.
+- **Engine:** Unity 6, **Universal 2D** project (URP 2D Renderer). The scene is 2D: coloured sprites, an orthographic camera and a Global Light 2D.
 - **Repository:** `~/apptrainers/unity-programmer-curriculum-levels`, one Unity project holding every level. Level 0 lives in `Assets/Levels/Level0/`:
 
 ```
@@ -24,7 +24,7 @@ Assets/Levels/Level0/
 └── Docs~/workbook/     workbook.md + PDF builder          (ignored by Unity)
 ```
 
-Students build the same game in **their own** 2D (URP) project, with scripts in `Assets/Scripts/` and the scene at `Assets/Scenes/Launch.unity`, as the book says. This repository is the instructor reference.
+Students build the same game in **their own** Universal 2D project, with scripts in `Assets/Scripts/` and the scene at `Assets/Scenes/Launch.unity`, as the book says. This repository is the instructor reference.
 
 ## 2. Hard rules (Level 0 limits)
 
