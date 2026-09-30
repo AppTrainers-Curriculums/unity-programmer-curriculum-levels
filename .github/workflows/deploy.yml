@@ -1,0 +1,71 @@
+name: Deploy site to GitHub Pages
+
+# The site lives in web/ and is built from each level's workbook.md, so only
+# changes to those (not every Unity commit) trigger a deploy.
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'web/**'
+      - 'Assets/Levels/*/Docs~/workbook/workbook.md'
+      - '.github/workflows/deploy.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow one concurrent deployment, don't cancel in-progress runs.
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+defaults:
+  run:
+    working-directory: web
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # PNGs are in Git LFS (see .gitattributes). Pull only the site's own,
+      # not the whole Unity project's.
+      - name: Pull the site's LFS files
+        run: git lfs pull --include="web/**"
+        working-directory: .
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install
+        run: npm ci
+      - name: Build (import workbooks + astro build + encrypt protected levels)
+        run: npm run build
+        env:
+          # Strict: fail the build if a protected level has no password, so we
+          # never deploy a level that should be locked but isn't.
+          STATICRYPT_STRICT: '1'
+          # Per-level passwords. Add each as a repo secret:
+          # Settings → Secrets and variables → Actions → New repository secret.
+          # One secret per protected level, named COURSE_PW_<SLUG>.
+          COURSE_PW_LEVEL_0: ${{ secrets.COURSE_PW_LEVEL_0 }}
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./web/dist
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

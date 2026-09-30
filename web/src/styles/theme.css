@@ -1,0 +1,79 @@
+/* AppTrainers brand theme for Starlight
+   Coral-red accent + slate, Poppins headings / Inter body. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Poppins:wght@600;700;800&display=swap');
+
+:root {
+  --sl-font: 'Inter', system-ui, sans-serif;
+
+  /* accent (dark theme) */
+  --sl-color-accent-low: #4d1519;
+  --sl-color-accent: #e13b4c;
+  --sl-color-accent-high: #f6b7be;
+
+  --at-red: #ec4a5a;
+  --at-slate: #3e4655;
+}
+
+:root[data-theme='light'] {
+  --sl-color-accent-low: #ffd9dd;
+  --sl-color-accent: #d3283b;
+  --sl-color-accent-high: #6b0e17;
+  --sl-color-text-accent: #d3283b;
+}
+
+/* Poppins for all headings + the site title / hero */
+h1, h2, h3, h4,
+.sl-markdown-content h1, .sl-markdown-content h2,
+.sl-markdown-content h3, .sl-markdown-content h4,
+.hero h1, .hero .tagline, .site-title {
+  font-family: 'Poppins', system-ui, sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Give beat headings (### 💡 Idea …) a little breathing room + accent tint */
+.sl-markdown-content h3 {
+  margin-top: 1.8rem;
+}
+
+/* Hero primary button in brand red */
+:root[data-theme='light'] .action.primary,
+.action.primary {
+  background: var(--at-red);
+  border-color: var(--at-red);
+  color: #fff;
+}
+
+/* Home hero image: soften with a rounded card + shadow */
+.hero img {
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(37, 42, 55, 0.22);
+}
+
+/* Inline code a touch closer to the PDF's pill look */
+.sl-markdown-content :not(pre) > code {
+  background: var(--sl-color-red-low, rgba(236, 74, 90, 0.12));
+  border: 1px solid rgba(236, 74, 90, 0.25);
+  color: var(--sl-color-text);
+}
+
+/* Show only the level you're currently in: hide any top-level sidebar group
+   that doesn't contain the active page. Each level is one top-level <li>, and
+   the current page carries aria-current="page". Applies to the desktop sidebar
+   and the mobile nav (same markup). */
+ul.top-level > li:not(:has([aria-current='page'])) {
+  display: none;
+}
+
+/* C# Concept pages: a slate "C# N" badge in the sidebar, the PDF's colour for
+   them, so they stand apart from the numbered (red) build chapters. */
+.sl-badge.badge-csharp {
+  --sl-color-bg-badge: var(--at-slate);
+  --sl-color-border-badge: var(--at-slate);
+  --sl-color-text-badge: #fff;
+}
+/* …except on the current page, where Starlight outlines badges so they read on
+   the accent highlight. */
+.sidebar-content a[aria-current='page'] > .sl-badge.badge-csharp {
+  --sl-color-bg-badge: transparent;
+  --sl-color-border-badge: currentColor;
+}

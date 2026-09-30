@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400" width="400" height="400">
+  <!-- The Level 0 cover art (Docs~/workbook/build.mjs, rocketArtHtml): same scene, same colours. -->
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#141127"/>
+      <stop offset="0.7" stop-color="#1E1A33"/>
+      <stop offset="1" stop-color="#2A2448"/>
+    </linearGradient>
+    <linearGradient id="flame" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFD166"/>
+      <stop offset="0.6" stop-color="#FF7A3D"/>
+      <stop offset="1" stop-color="#FF4D6D" stop-opacity="0"/>
+    </linearGradient>
+    <clipPath id="frame"><rect width="400" height="400" rx="24"/></clipPath>
+  </defs>
+  <g clip-path="url(#frame)">
+    <rect width="400" height="400" fill="url(#sky)"/>
+    <g fill="#F5F3FF" opacity="0.75">
+      <circle cx="32" cy="48" r="1.8"/><circle cx="72" cy="120" r="1.5"/><circle cx="108" cy="32" r="1.8"/>
+      <circle cx="160" cy="88" r="1.4"/><circle cx="252" cy="24" r="1.8"/><circle cx="292" cy="120" r="1.5"/>
+      <circle cx="320" cy="48" r="1.8"/><circle cx="364" cy="96" r="1.5"/><circle cx="376" cy="30" r="1.4"/>
+      <circle cx="48" cy="192" r="1.5"/><circle cx="120" cy="164" r="1.4"/><circle cx="352" cy="176" r="1.8"/>
+      <circle cx="300" cy="212" r="1.4"/><circle cx="20" cy="280" r="1.5"/><circle cx="380" cy="264" r="1.5"/>
+      <circle cx="84" cy="248" r="1.2"/><circle cx="330" cy="310" r="1.2"/>
+    </g>
+    <rect y="356" width="400" height="44" fill="#2E2A45"/>
+    <rect x="130" y="346" width="140" height="10" rx="3" fill="#6B6F7B"/>
+    <g fill="#F5F3FF" opacity="0.14">
+      <circle cx="152" cy="336" r="15"/><circle cx="248" cy="336" r="17"/>
+      <circle cx="174" cy="344" r="10"/><circle cx="228" cy="346" r="11"/>
+    </g>
+    <path d="M189 306 C189 322 195 334 200 346 C205 334 211 322 211 306 Z" fill="url(#flame)"/>
+    <rect x="186" y="294" width="28" height="12" rx="2" fill="#6B6F7B"/>
+    <path d="M178 236 L148 284 L148 316 L178 296 Z" fill="#EF4050"/>
+    <path d="M222 236 L252 284 L252 316 L222 296 Z" fill="#EF4050"/>
+    <path d="M176 162 C176 128 189 106 200 92 C211 106 224 128 224 162 Z" fill="#EF4050"/>
+    <rect x="174" y="150" width="52" height="148" rx="10" fill="#F5F3FF"/>
+    <circle cx="200" cy="192" r="13" fill="#3DDCC8" stroke="#232733" stroke-width="4"/>
+  </g>
+</svg>

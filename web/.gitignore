@@ -1,0 +1,14 @@
+# dependencies
+node_modules/
+
+# build output
+dist/
+.astro/
+
+# generated from each level's workbook.md by scripts/import.mjs (run on every
+# dev / build): everything under docs/ except the hand-written home page
+src/content/docs/*
+!src/content/docs/index.mdx
+
+# os
+.DS_Store

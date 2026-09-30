@@ -1,0 +1,53 @@
+---
+title: Unity Programmer Curriculum
+description: Learn C# and Unity level by level, from your first line of code to complete games.
+template: splash
+hero:
+  tagline: Learn to code · make games. A level-by-level route from your first line of C# to complete Unity games, where every level is a real, playable project.
+  image:
+    file: ../../assets/rocket-launch.svg
+    alt: A rocket lifting off its launch pad under a night sky
+---
+
+import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
+import { publishedLevels, introPath } from '../../../levels.config.mjs';
+
+export const url = (p) => import.meta.env.BASE_URL.replace(/\/?$/, '/') + p;
+
+## Levels
+
+<CardGrid>
+  {publishedLevels.map((l) => (
+    <LinkCard
+      key={l.slug}
+      title={l.protected ? `🔒 ${l.cardTitle}` : l.cardTitle}
+      description={
+        l.protected
+          ? `${l.cardDescription} (Password required — ask your instructor.)`
+          : l.cardDescription
+      }
+      href={url(introPath(l))}
+    />
+  ))}
+</CardGrid>
+
+## How the levels work
+
+<CardGrid>
+  <Card title="Build chapters" icon="rocket">
+    Build the game in Unity, step by step. Type the code, press Play at every
+    checkpoint, and see it work.
+  </Card>
+  <Card title="C# Concepts" icon="document">
+    One C# idea at a time, just before the build chapter that needs it. Predict
+    what each example prints, then check.
+  </Card>
+  <Card title="Always runnable" icon="seti:unity">
+    No chapter leaves you with code you can't run. Each ends with a checkpoint
+    you can play.
+  </Card>
+  <Card title="Check yourself" icon="approve-check">
+    Every level ends with exam-style practice and a checklist: pass it and you're
+    ready for the next level's entry test.
+  </Card>
+</CardGrid>

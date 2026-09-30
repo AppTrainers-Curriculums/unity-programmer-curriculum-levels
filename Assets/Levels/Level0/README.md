@@ -12,7 +12,7 @@ The first level of the Unity Programmer Curriculum: first C# code and first Unit
 | `Scripts/Rocket.cs` | Countdown, liftoff, flight, stages, fuel and result (methods, parameters, return values). |
 | `Editor/RocketSceneBuilder.cs` | **Instructor tool.** Menu **Tools → Rocket Launch (Level 0) → Build Scene** creates `Scenes/Launch.unity` exactly as Chapter 2 describes it. |
 | `Scenes/`, `Sprites/` | Created by the scene builder the first time you run it. |
-| `Docs~/workbook/` | Source of the PDF (Markdown + builder). The `~` makes Unity ignore the folder. |
+| `Docs~/workbook/` | Source of the PDF (Markdown + builder). The `~` makes Unity ignore the folder. `workbook.md` is also the source of the website: see `web/README.md` at the repo root. |
 
 ## First run
 
