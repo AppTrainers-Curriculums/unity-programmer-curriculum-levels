@@ -224,7 +224,7 @@ public class Rocket : MonoBehaviour
 
 ## 4. The scene
 
-`Assets/Levels/Level0/Scenes/Launch.unity`, created by **Tools → Rocket Launch (Level 0) → Build Scene** (`Editor/RocketSceneBuilder.cs`). The builder generates white 1-unit `Square` and `Circle` sprites in `Sprites/`, standing in for the ones students create via **GameObject → 2D Object → Sprites**, and adds the scene to Build Settings.
+`Assets/Levels/Level0/Scenes/Launch.unity`, created by **Tools → Rocket Launch (Level 0) → Build Scene** (`Editor/RocketSceneBuilder.cs`). The builder generates white 1-unit `Square` and `Circle` sprites in `Sprites/`, standing in for the ones students create via **GameObject → 2D Object → Sprites**, and puts the scene first in Build Settings, so a build starts with it.
 
 | Object | Parent | Sprite | Position | Rotation Z | Scale | Color | Order in Layer | Script |
 |---|---|---|---|---|---|---|---|---|

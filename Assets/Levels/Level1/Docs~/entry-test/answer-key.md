@@ -18,8 +18,9 @@ comparable.
 
 ### Before the test
 
-- Print the **student paper** (written paper and practical task) and the **Level 0
-  cheat sheet** (the last pages of the Level 0 book), one each per student.
+- Print the student paper as two sets, **Sections 1–2** (the cover and pages 1–7)
+  and **Section 3** (page 8 to the end), and the **Level 0 cheat sheet** (the last
+  pages of the Level 0 book), one of each per student.
 - Check each lab machine has **Unity 6** with the **Universal 2D** template, and a code
   editor connected to Unity.
 - Students work alone, with no internet, AI tools or earlier projects.
@@ -28,9 +29,9 @@ comparable.
 
 | Part | Time | Notes |
 | --- | --- | --- |
-| Written paper | 40 minutes | Closed book. Collect the papers before the practical starts. |
+| Written paper | 40 minutes | Closed book: hand out Sections 1–2 only, with no cheat sheet on the desks. Collect them when time is up. |
 | Break | 10 minutes | |
-| Practical task | 50 minutes | Cheat sheet allowed. At the end, students leave Unity open with the scene saved. |
+| Practical task | 50 minutes | Hand out Section 3 and the cheat sheet now. At the end, students leave Unity open with the scene saved. |
 
 ### Marking the practical
 

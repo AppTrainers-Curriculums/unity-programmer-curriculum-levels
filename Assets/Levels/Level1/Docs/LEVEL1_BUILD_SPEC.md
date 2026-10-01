@@ -53,7 +53,7 @@ Rules: red block +1, gold +5, bad block caught −1 life; missing red or gold �
 
 ## 4. The scene
 
-`Assets/Levels/Level1/Scenes/Catch.unity`, created by **Tools → Catch the Falling Blocks (Level 1) → Build Scene** (`Editor/CatchSceneBuilder.cs`). The builder also adds the tags `Block`, `GoldBlock`, `BadBlock`, generates `Sprites/Square.png` (white, 1 unit), creates the three prefabs, and adds the scene to Build Settings. It needs the **TMP Essential Resources**; if they're missing, it opens the Import Unity Package window (click **Import**) and asks you to run it again.
+`Assets/Levels/Level1/Scenes/Catch.unity`, created by **Tools → Catch the Falling Blocks (Level 1) → Build Scene** (`Editor/CatchSceneBuilder.cs`). The builder also adds the tags `Block`, `GoldBlock`, `BadBlock`, generates `Sprites/Square.png` (white, 1 unit), creates the three prefabs, and puts the scene first in Build Settings, so a build starts with it. It needs the **TMP Essential Resources**; if they're missing, it opens the Import Unity Package window (click **Import**) and asks you to run it again.
 
 ### World objects
 

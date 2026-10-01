@@ -45,7 +45,7 @@ node build.mjs ../entry-test/test.md ../../Docs/Level1-Entry-Test.pdf
 node build.mjs ../entry-test/answer-key.md ../../Docs/Level1-Entry-Test-Answer-Key.pdf
 ```
 
-Requires Google Chrome (path in `build.mjs`, or set `CHROME_PATH`). This `build.mjs` is Level 0's plus a Level 1 cover (`coverArt: catch`) and `## Section N — Title` headers for the test papers.
+Requires Google Chrome (path in `build.mjs`, or set `CHROME_PATH`). `build.mjs` is the same file in Levels 0, 1 and 2 (Level 2's is in `../Level2-Shared/Docs~/pdf`), and so is `style.css`, except that Level 2 sets code a little smaller: fix one, then copy it to the others. `../Level2-Shared/README.md` describes what the builder does: the covers (`coverArt: catch` for this book), `## Section N — Title` headers for the test papers, page breaks, and chapters set a little tighter so none ends on a nearly empty page.
 
 ## Keep the code cards honest
 

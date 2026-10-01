@@ -28,7 +28,8 @@ Level 1.
 
 ### Rules
 
-- **Written paper:** closed book. Write your answers in the spaces.
+- **Written paper:** closed book. Write your answers in the spaces. Your trainer
+  collects it before handing out the practical task.
 - **Practical task:** you may use Unity, your code editor, and the printed **Level 0
   cheat sheet**. No other notes, websites, AI tools or code from earlier projects.
 - Read each question to the end before answering. Several questions look like

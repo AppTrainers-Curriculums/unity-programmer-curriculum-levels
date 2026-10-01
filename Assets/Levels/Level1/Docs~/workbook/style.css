@@ -38,7 +38,10 @@ p { margin: 0 0 0.75em; }
 strong { color: var(--ink); font-weight: 600; }
 em { color: var(--ink-soft); }
 
-.content { padding: 2mm 0; }
+/* No space after the last block: space that doesn't fit on the last page would
+   start a blank one. */
+.content { padding: 2mm 0 0; }
+.content > :last-child, .content > :last-child > :last-child { margin-bottom: 0; }
 
 /* ---------- Headings ---------- */
 h1, h2, h3, h4 {
@@ -220,6 +223,7 @@ ol > li::before {
 :not(pre) > code {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.86em;
+  white-space: pre-wrap;      /* keep runs of spaces ("Score: 7   Time: 12.4") */
   background: var(--red-soft);
   color: var(--red-dark);
   padding: 1px 6px;
@@ -235,6 +239,10 @@ ol > li::before {
   border: 1px solid #E4E6EB;
   break-inside: avoid;
 }
+/* A card taller than half a page (build.mjs adds .long) continues on the next
+   page instead of leaving a big gap; its title bar stays with the first lines. */
+.code-card.long { break-inside: auto; }
+.code-card .bar { break-after: avoid; }
 .code-card .bar {
   background: var(--code-bar);
   padding: 9px 14px;
@@ -302,7 +310,8 @@ ol > li::before {
   font-size: 8.3pt;
   line-height: 1.5;
   color: var(--ink);
-  overflow-x: auto;
+  white-space: pre-wrap;      /* a long Console line wraps instead of widening the page */
+  overflow-wrap: anywhere;
 }
 
 hr {
@@ -328,8 +337,14 @@ table.tbl {
   border-collapse: collapse;
   margin: 14px 0 18px;
   font-size: 9.6pt;
-  break-inside: avoid;
+  break-inside: avoid;        /* a table moves whole to the next page… */
 }
+/* …unless it's taller than a third of a page (build.mjs adds .long): then it
+   continues there, never splitting a row, and never leaving a single row on
+   either page. */
+table.tbl.long { break-inside: auto; }
+table.tbl tr { break-inside: avoid; }
+table.tbl.long tbody tr:nth-child(2), table.tbl.long tbody tr:last-child { break-before: avoid; }
 table.tbl th {
   background: var(--ink);
   color: #fff;
@@ -347,7 +362,7 @@ table.tbl td {
   vertical-align: top;
 }
 table.tbl tbody tr:nth-child(even) { background: var(--card-2); }
-table.tbl code { white-space: nowrap; }
+table.tbl code { white-space: pre-wrap; }   /* wraps at spaces and after dots, never widens the page */
 
 /* C# concept chapters (## C# N — Title): slate instead of red */
 .chapter.cs .num {
@@ -355,3 +370,43 @@ table.tbl code { white-space: nowrap; }
   box-shadow: 0 5px 14px rgba(62,70,85,0.26);
 }
 .chapter.cs .titles .eyebrow { color: var(--ink); }
+
+/* ---- keep headings and lead-ins with what follows ------------------------ */
+h2.section, h3.plain, h4.plain, .beat { break-after: avoid; }
+p:has(+ .code-card), p:has(+ table.tbl), p:has(+ .diagram), p:has(+ ul), p:has(+ ol),
+ol:has(+ .code-card), ul:has(+ .code-card), ol:has(+ table.tbl), ul:has(+ table.tbl),
+ol:has(+ .diagram), ul:has(+ .diagram) { break-after: avoid; }
+
+/* A short bullet list (a question's options) stays whole, and so does a beat
+   label ("Idea", "Do it"…); a list item keeps its sub-list; a code card never
+   ends a page with just a line or two, or starts one with them. */
+ul:not(:has(> li:nth-child(5))) { break-inside: avoid; }
+.beat, .callout { break-inside: avoid; }
+/* A longer list may split, but never leaves one item alone on either page.
+   (Not for a one-item list: that would glue it to whatever comes before it.) */
+ul > li:nth-child(2), ol > li:nth-child(2),
+ul > li:last-child:not(:first-child), ol > li:last-child:not(:first-child) { break-before: avoid; }
+li > ul, li > ol { break-before: avoid; }
+.code-card .code code { widows: 4; orphans: 3; }
+
+/* ---- chapters set a little tighter ----------------------------------------
+   build.mjs puts each chapter in a <section class="seg">. When a chapter's last
+   page would hold only a few lines, it adds .tight and .t1 (then .t2): less
+   space between lines and blocks, until those lines fit on the page before. */
+.seg { position: relative; }
+a.pb { position: absolute; left: 0; width: 1px; height: 1px; }
+a.pb-s { top: 0; }
+a.pb-e { bottom: 0; }
+.seg.t1 { --t: 0.8;  --pm: 0.64em; line-height: 1.64; --code-lh: 1.56; }
+.seg.t2 { --t: 0.65; --pm: 0.6em;  line-height: 1.58; --code-lh: 1.5; }
+.seg.tight p { margin-bottom: var(--pm); }
+.seg.tight .callout p:last-child { margin-bottom: 0; }
+.seg.tight .beat { margin: calc(22px * var(--t)) 0 calc(10px * var(--t)); }
+.seg.tight h3.plain { margin: calc(22px * var(--t)) 0 calc(8px * var(--t)); }
+.seg.tight .goal { margin-bottom: calc(18px * var(--t)); }
+.seg.tight .code-card, .seg.tight .diagram, .seg.tight table.tbl { margin: calc(14px * var(--t)) 0 calc(18px * var(--t)); }
+.seg.tight .callout { margin: calc(14px * var(--t)) 0; }
+.seg.tight ul, .seg.tight ol { margin: calc(8px * var(--t)) 0 calc(14px * var(--t)); }
+.seg.tight ul > li, .seg.tight ol > li { margin: calc(7px * var(--t)) 0; }
+.seg.tight table.tbl td, .seg.tight table.tbl th { padding-top: calc(7px * var(--t)); padding-bottom: calc(7px * var(--t)); }
+.seg.tight .code-card .code code { line-height: var(--code-lh); }

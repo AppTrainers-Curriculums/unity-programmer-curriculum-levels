@@ -1,10 +1,10 @@
 import fs from 'fs';
 import path from 'path';
-import { fileURLToPath } from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { marked } from 'marked';
 import hljs from 'highlight.js';
 import puppeteer from 'puppeteer-core';
-import { PDFDocument } from 'pdf-lib';
+import { PDFDocument, PDFName, PDFArray } from 'pdf-lib';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const CHROME = process.env.CHROME_PATH || '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome';
@@ -17,7 +17,12 @@ const OUT = process.argv[3] || path.join(__dirname, 'out.pdf');
 
 // ---------- helpers ----------
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
-const inline = (s) => marked.parseInline(s);
+// Inline code may break after a dot before a name (Touchscreen.current.primaryTouch…),
+// so a long API name in a narrow table column wraps instead of widening the page:
+// a page wider than A4 makes Chrome shrink the whole PDF to fit.
+const breakable = (html) => html.replace(/<code>([^<]*)<\/code>/g,
+  (all, code) => `<code>${code.replace(/\.(?=[A-Za-z_])/g, '.<wbr>')}</code>`);
+const inline = (s) => breakable(marked.parseInline(s));
 
 const BEATS = {
   'idea':      { cls: 'idea',      ico: '💡', label: 'Idea' },
@@ -159,10 +164,9 @@ function renderTokens(tokens) {
         break;
       }
       case 'list': {
-        const tag = tok.ordered ? 'ol' : 'ul';
         let items = '';
         for (const it of tok.items) items += `<li>${renderListItem(it)}</li>`;
-        html += `<${tag}>${items}</${tag}>`;
+        html += `${listOpen(tok)}${items}</${tok.ordered ? 'ol' : 'ul'}>`;
         break;
       }
       case 'table': {
@@ -182,15 +186,23 @@ function renderTokens(tokens) {
   return html;
 }
 
+// A numbered list can start at any number: a list that carries on after a code
+// block ("3. Replace ...") starts at 3. The numbers are drawn by a CSS counter,
+// so start it one lower.
+function listOpen(tok) {
+  if (!tok.ordered) return '<ul>';
+  const start = Number(tok.start);
+  return start > 1 ? `<ol style="counter-reset: li ${start - 1}">` : '<ol>';
+}
+
 function renderListItem(item) {
   let out = '';
   for (const t of item.tokens) {
     if (t.type === 'text') out += inline(t.text);
     else if (t.type === 'list') {
-      const tag = t.ordered ? 'ol' : 'ul';
       let sub = '';
       for (const it of t.items) sub += `<li>${renderListItem(it)}</li>`;
-      out += `<${tag}>${sub}</${tag}>`;
+      out += `${listOpen(t)}${sub}</${t.ordered ? 'ol' : 'ul'}>`;
     } else if (t.type === 'code') {
       out += t.lang && t.lang.startsWith('csharp') ? codeCard(t.text, '') : diagram(t.text);
     } else if (t.type === 'paragraph') {
@@ -280,10 +292,24 @@ const ROCKET_CSS = `
 
 // C# guide cover art: a code editor with its Console output, drawn in CSS.
 // Select it with `coverArt: code` in the front matter.
-function codeArtHtml() {
+function codeArtHtml(meta) {
   const k = (t) => `<b class="k">${t}</b>`, st = (t) => `<b class="s">${t}</b>`,
         n = (t) => `<b class="n">${t}</b>`, c = (t) => `<b class="c">${t}</b>`, ty = (t) => `<b class="t">${t}</b>`;
-  const lines = [
+  // `coverCode: level1` in the front matter shows Level 1 code (arrays, loops,
+  // interpolation), for the Level 2 entry test; the default is Level 0's. It must
+  // not show the answer to a question on the closed-book paper.
+  const level1 = meta.coverCode === 'level1';
+  const lines = (level1 ? [
+    `${c('// Catch report')}`,
+    `${k('string')}[] tags = { ${st('"Block"')}, ${st('"GoldBlock"')} };`,
+    `${k('int')} score = ${n('0')};`,
+    ``,
+    `${k('foreach')} (${k('string')} tag ${k('in')} tags)`,
+    `{`,
+    `&nbsp;&nbsp;&nbsp;&nbsp;score += tag.Length;`,
+    `}`,
+    `${ty('Debug')}.Log(${st('$"Score: {score}"')});`,
+  ] : [
     `${c('// Mission check')}`,
     `${k('string')} rocketName = ${st('"Falcon"')};`,
     `${k('int')} crew = ${n('3')};`,
@@ -294,12 +320,13 @@ function codeArtHtml() {
     `{`,
     `&nbsp;&nbsp;&nbsp;&nbsp;${ty('Debug')}.Log(rocketName + ${st('" is GO"')});`,
     `}`,
-  ].map((l, i) => `<div><span class="ln">${i + 1}</span>${l || '&nbsp;'}</div>`).join('');
+  ]).map((l, i) => `<div><span class="ln">${i + 1}</span>${l || '&nbsp;'}</div>`).join('');
+  const output = level1 ? 'Score: 14' : 'Falcon is GO';
   return `<div class="shot">
     <div class="screen codescene">
       <div class="ed"><div class="tabs"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="fn">Practice.cs</span></div>
         <div class="src">${lines}</div></div>
-      <div class="con"><div class="ch">Console</div><p>Falcon is GO</p></div>
+      <div class="con"><div class="ch">Console</div><p>${output}</p></div>
     </div>
   </div>`;
 }
@@ -320,9 +347,18 @@ const CODE_CSS = `
   .codescene .con p{margin:0;}
 `;
 
+// Level 2 covers (`coverArt: image`): a picture of the game, from the PNG named
+// by `coverImage`, next to the workbook's markdown file.
+function imageArtHtml(meta) {
+  const file = path.join(path.dirname(path.resolve(SRC)), meta.coverImage || 'cover.png');
+  const data = fs.readFileSync(file).toString('base64');
+  return `<div class="shot"><img src="data:image/png;base64,${data}" style="display:block;width:100%;"></div>`;
+}
+
 function coverHtml(meta, cssLinks) {
   const rocketArt = meta.coverArt === 'rocket';
   const codeArt = meta.coverArt === 'code';
+  const imageArt = meta.coverArt === 'image';
   return `<!doctype html><html><head><meta charset="utf-8">${cssLinks}
   <style>
   html,body{margin:0;padding:0;width:210mm;height:297mm;overflow:hidden;}
@@ -359,7 +395,7 @@ function coverHtml(meta, cssLinks) {
       <div class="subtitle">${esc(meta.coverSub || '')}</div>
       <div class="pill">${esc(meta.coverPill || 'Student Workbook')}</div>
     </div>
-    ${rocketArt ? rocketArtHtml() : codeArt ? codeArtHtml() : gameArtHtml(meta)}
+    ${imageArt ? imageArtHtml(meta) : rocketArt ? rocketArtHtml() : codeArt ? codeArtHtml(meta) : gameArtHtml(meta)}
     <div class="caption">${esc(meta.coverCaption || '')}</div>
   </div></body></html>`;
 }
@@ -380,37 +416,202 @@ const contentHtml = `<!doctype html><html><head><meta charset="utf-8">
 
 const coverPage = coverHtml(meta, `<base href="file://${__dirname}/"><style>${fontsCss}</style>`);
 
+// The two pages are printed from these files (see openPage below).
+const contentFile = path.join(__dirname, 'build', 'content.html');
+const coverFile = path.join(__dirname, 'build', 'cover.html');
 fs.mkdirSync(path.join(__dirname, 'build'), { recursive: true });
-fs.writeFileSync(path.join(__dirname, 'build', 'content.html'), contentHtml);
-fs.writeFileSync(path.join(__dirname, 'build', 'cover.html'), coverPage);
+fs.writeFileSync(contentFile, contentHtml);
+fs.writeFileSync(coverFile, coverPage);
 
 const browser = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--no-sandbox', ...(process.env.CHROME_ARGS ? JSON.parse(process.env.CHROME_ARGS) : [])] });
 
-async function renderPdf(html, opts) {
+// The page size: A4, and the content inside the margins, in CSS pixels
+// (680 × 994). Chrome prints the content pages with these margins.
+const MARGIN = { top: 18, bottom: 16, left: 15, right: 15 };     // mm
+const PX_PER_MM = 96 / 25.4, PT_PER_MM = 72 / 25.4;
+const BOX = {
+  width: Math.round((210 - MARGIN.left - MARGIN.right) * PX_PER_MM),
+  height: Math.round((297 - MARGIN.top - MARGIN.bottom) * PX_PER_MM),
+};
+
+// Open a page from its file, so the fonts in fonts/ load: a page made with
+// setContent() may not load local files, and would print in fallback fonts.
+async function openPage(file) {
   const page = await browser.newPage();
-  await page.setContent(html, { waitUntil: 'networkidle0' });
+  await page.goto(pathToFileURL(file).href, { waitUntil: 'networkidle0' });
   await page.evaluateHandle('document.fonts.ready');
+  const broken = await page.evaluate(() => [...document.fonts]
+    .filter((f) => f.status === 'error').map((f) => `${f.family} ${f.weight}`));
+  if (broken.length) throw new Error(`these fonts didn't load: ${broken.join(', ')} (check fonts/ and fonts.css)`);
+  return page;
+}
+
+async function renderPdf(file, opts) {
+  const page = await openPage(file);
   const buf = await page.pdf(opts);
   await page.close();
   return buf;
 }
 
+// ---------- the content, with no nearly empty last pages ----------
+// Every chapter starts on a new page, so a chapter whose last page would hold
+// only a few lines leaves a page that is nearly empty. The builder prints the
+// content, finds those pages (a 1-pixel link at the start and at the end of each
+// chapter shows where they land), sets those chapters a little tighter (.t1,
+// then .t2 in style.css), and prints again, until the lines fit on the page
+// before.
+const SHORT = 0.15;                        // a last page less than 15% full
+const TIGHTEST = 2;                        // .t1, then .t2
+
+// In the page: a code card taller than half a page, or a table taller than a
+// third of one, may continue on the next page (.long in style.css); shorter ones
+// move to the next page whole.
+function markLong(pageHeight) {
+  for (const el of document.querySelectorAll('.code-card, table.tbl')) {
+    const limit = el.matches('table') ? pageHeight / 3 : pageHeight / 2;
+    if (el.getBoundingClientRect().height > limit) el.classList.add('long');
+  }
+}
+
+// In the page: put each chapter (and each run of pages between two dividers) in
+// a <section class="seg">, with its two marker links. Returns how many.
+function wrapChapters() {
+  const content = document.querySelector('.content');
+  let seg = null, n = 0;
+  for (const el of [...content.children]) {
+    if (el.matches('.part')) { seg = null; continue; }
+    if (!seg || el.matches('header.chapter')) {
+      seg = document.createElement('section');
+      seg.className = 'seg';
+      seg.id = 'seg-' + n;
+      el.before(seg);
+      for (const end of ['s', 'e']) {
+        const a = document.createElement('a');
+        a.className = 'pb pb-' + end;
+        a.id = `pb-${end}-${n}`;
+        a.href = '#' + a.id;
+        seg.appendChild(a);
+      }
+      n++;
+    }
+    seg.appendChild(el);
+  }
+  return n;
+}
+
+// Where each marker link landed: its page, and how far down the page it is.
+// A start marker keeps its first place, an end marker its last.
+async function markerPlaces(buf) {
+  const doc = await PDFDocument.load(buf);
+  const places = {};
+  doc.getPages().forEach((p, i) => {
+    const annots = p.node.lookup(PDFName.of('Annots'));
+    if (!(annots instanceof PDFArray)) return;
+    const top = MARGIN.top * PT_PER_MM, height = p.getHeight() - top - MARGIN.bottom * PT_PER_MM;
+    for (let k = 0; k < annots.size(); k++) {
+      const a = annots.lookup(k);
+      const dest = a.get(PDFName.of('Dest'));
+      if (!(dest instanceof PDFName) || !dest.toString().startsWith('/pb-')) continue;
+      const name = dest.toString().slice(1);
+      if (name.startsWith('pb-s-') && places[name]) continue;
+      const r = a.lookup(PDFName.of('Rect'), PDFArray).asRectangle();
+      places[name] = { page: i, fill: (p.getHeight() - r.y - top) / height };
+    }
+  });
+  return places;
+}
+
+// The chapters whose last page is nearly empty.
+function shortChapters(places, n) {
+  const out = [];
+  for (let k = 0; k < n; k++) {
+    const s = places['pb-s-' + k], e = places['pb-e-' + k];
+    if (s && e && e.page > s.page && e.fill < SHORT) out.push({ k, page: e.page + 1 });
+  }
+  return out;
+}
+
+async function renderContent(file, opts) {
+  const page = await openPage(file);
+  // Lay the page out as it prints.
+  await page.emulateMediaType('print');
+  await page.setViewport(BOX);
+  await page.evaluate(markLong, BOX.height);
+  const n = await page.evaluate(wrapChapters);
+  const level = new Array(n).fill(0);
+  const setLevels = () => page.evaluate((lv) => lv.forEach((l, k) => {
+    const seg = document.getElementById('seg-' + k);
+    seg.classList.remove('tight', 't1', 't2');
+    if (l) seg.classList.add('tight', 't' + l);
+  }), level);
+  let buf = await page.pdf(opts);
+  const found = Object.keys(await markerPlaces(buf)).length;
+  if (found !== 2 * n) {
+    // Chrome didn't keep the marker links, so there's no way to see where the
+    // chapters end: print the book as it is.
+    console.log(`note: found ${found} of ${2 * n} chapter markers in the PDF, so nearly empty last pages weren't checked`);
+    await page.close();
+    return buf;
+  }
+  for (let round = 0; round < TIGHTEST; round++) {
+    const next = shortChapters(await markerPlaces(buf), n).filter(({ k }) => level[k] < TIGHTEST);
+    if (!next.length) break;
+    for (const { k } of next) level[k]++;
+    await setLevels();
+    buf = await page.pdf(opts);
+  }
+  // Tighter still didn't help: set those chapters normally again, and say so.
+  const left = shortChapters(await markerPlaces(buf), n);
+  if (left.length) {
+    for (const { k } of left) level[k] = 0;
+    await setLevels();
+    buf = await page.pdf(opts);
+    for (const { page: p } of shortChapters(await markerPlaces(buf), n)) {
+      console.log(`note: content page ${p} is nearly empty (the end of a chapter)`);
+    }
+  }
+  const tightened = await page.evaluate((lv) => lv.map((l, k) => l && (() => {
+    const seg = document.getElementById('seg-' + k);
+    const h = seg.querySelector('header.chapter');
+    const first = seg.querySelector('h1, h2, h3');
+    const name = h ? `${h.querySelector('.eyebrow').textContent} ${h.querySelector('.num').textContent}`
+      : `"${first ? first.textContent : 'the opening pages'}"`;
+    return `${name.replace(/\s+/g, ' ').trim()} (${'t' + l})`;
+  })()).filter(Boolean), level);
+  if (tightened.length) console.log(`set a little tighter, so no last page is nearly empty: ${tightened.join(', ')}`);
+  await page.close();
+  return buf;
+}
+
+// The marker links have done their job: take them out of the finished PDF.
+function dropMarkers(doc) {
+  for (const p of doc.getPages()) {
+    const annots = p.node.lookup(PDFName.of('Annots'));
+    if (!(annots instanceof PDFArray)) continue;
+    for (let k = annots.size() - 1; k >= 0; k--) {
+      const dest = annots.lookup(k).get(PDFName.of('Dest'));
+      if (dest instanceof PDFName && dest.toString().startsWith('/pb-')) annots.remove(k);
+    }
+    if (annots.size() === 0) p.node.delete(PDFName.of('Annots'));
+  }
+}
+
 // No running header (no logo in this workbook) — just a thin page footer.
 const header = '<div></div>';
-const footerLeft = esc(`${meta.title || 'Catch the Falling Blocks'}  ·  ${meta.coverPill || 'Student Workbook'}`);
+const footerLeft = esc(meta.footer || `${meta.title || 'Catch the Falling Blocks'}  ·  ${meta.coverPill || 'Student Workbook'}`);
 const footer = `<div style="width:100%;font-family:Helvetica,Arial,sans-serif;font-size:7.5pt;color:#A9B0BC;padding:0 15mm 4mm;display:flex;justify-content:space-between;align-items:center;">
   <span>${footerLeft}</span>
   <span style="color:#EC4A5A;font-weight:600;">Page <span class="pageNumber"></span></span></div>`;
 
-const contentPdf = await renderPdf(contentHtml, {
+const contentPdf = await renderContent(contentFile, {
   format: 'A4', printBackground: true,
   displayHeaderFooter: true,
   headerTemplate: header,
   footerTemplate: footer,
-  margin: { top: '18mm', bottom: '16mm', left: '15mm', right: '15mm' },
+  margin: { top: MARGIN.top + 'mm', bottom: MARGIN.bottom + 'mm', left: MARGIN.left + 'mm', right: MARGIN.right + 'mm' },
 });
 
-const coverPdf = await renderPdf(coverPage, {
+const coverPdf = await renderPdf(coverFile, {
   width: '210mm', height: '297mm', printBackground: true,
   margin: { top: 0, bottom: 0, left: 0, right: 0 },
 });
@@ -418,6 +619,7 @@ const coverPdf = await renderPdf(coverPage, {
 const merged = await PDFDocument.create();
 for (const src of [coverPdf, contentPdf]) {
   const doc = await PDFDocument.load(src);
+  dropMarkers(doc);
   const pages = await merged.copyPages(doc, doc.getPageIndices());
   pages.forEach((p) => merged.addPage(p));
 }

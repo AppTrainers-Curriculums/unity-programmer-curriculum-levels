@@ -135,17 +135,19 @@ public static class RocketSceneBuilder
         return AssetDatabase.LoadAssetAtPath<Sprite>(path);
     }
 
+    // Puts the scene first in Build Settings, ticked, so a build starts with it,
+    // and drops any scene whose file has been deleted.
     static void AddToBuildSettings(string scenePath)
     {
-        var scenes = new System.Collections.Generic.List<EditorBuildSettingsScene>(EditorBuildSettings.scenes);
-        foreach (var s in scenes)
+        var scenes = new System.Collections.Generic.List<EditorBuildSettingsScene>();
+        scenes.Add(new EditorBuildSettingsScene(scenePath, true));
+        foreach (EditorBuildSettingsScene s in EditorBuildSettings.scenes)
         {
-            if (s.path == scenePath)
+            if (s.path != scenePath && File.Exists(s.path))
             {
-                return;
+                scenes.Add(s);
             }
         }
-        scenes.Add(new EditorBuildSettingsScene(scenePath, true));
         EditorBuildSettings.scenes = scenes.ToArray();
     }
 
