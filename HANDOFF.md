@@ -24,7 +24,7 @@ Level N's exit test is Level N+1's entry test.
 | 0 | Zero | Rocket Launch | Done |
 | 1 | Beginner | Catch the Falling Blocks | Done, with its entry test |
 | 2 | Builder | Mini Golf (3D), Space Shooter (2D), Tank Arena (2D) | Done, with its entry test |
-| 3 | Junior-ready | Agreed: **Knight Run** (core), Crypt Keys, Gate Guard | **Next.** Ends at **Unity Certified User: Programmer** |
+| 3 | Junior-ready | **Knight Run** (core), then Crypt Keys and Gate Guard | **In progress:** Knight Run is built; Crypt Keys, Gate Guard and the entry test are next. Ends at **Unity Certified User: Programmer** |
 | 4 | Junior | Planned: **Arcane Duel** (core), Pocket Karts, Juice Tycoon | Ends at **Unity Certified Associate: Programmer** |
 | 5 | Mid-level I | Planned: **Lost Ruins** (core), Box Pusher, Tiny Colony (optional) | |
 | 6 | Mid-level II | Planned: **Card Table** (core), Arena Online (optional) | |
@@ -75,6 +75,8 @@ Decisions so far:
 | `Assets/Levels/Level2-MiniGolf/` | **Mini Golf**, 3D, with Kenney's Minigolf Kit. 12 scripts, the builder, the book: 15 chapters, 158 pages |
 | `Assets/Levels/Level2-SpaceShooter/` | **Space Shooter**, 2D, with Kenney's Space Shooter Remastered. 11 scripts, the builder, the book: 14 chapters, 173 pages |
 | `Assets/Levels/Level2-TankArena/` | **Tank Arena**, 2D top-down, with Kenney's Top-down Tanks. 12 scripts, the builder, the book: 15 chapters, 187 pages |
+| `Assets/Levels/Level3-Shared/` | Shared by the Level 3 books: the 12 C# Concept chapters, the Check Yourself part, the book assembler, the **code checker** (`check-code.mjs`), the PDF builder and the scene builders' helper kit. The Level 3 entry test will go here |
+| `Assets/Levels/Level3-KnightRun/` | **Knight Run**, a 2D platformer, with the Brackeys Platformer Bundle. 14 scripts, the builder and its level map, the book: 15 chapters and 12 C# Concept chapters, 228 pages |
 | `Assets/Levels/Unity-Programmer-Curriculum-Levels.pdf` | The Level Reference. The website's home page links it |
 | `web/` | The course website (Astro and Starlight), built from the books' `workbook.md` files. See `web/README.md` |
 | `.github/workflows/deploy.yml` | Builds the site and deploys it to GitHub Pages |
@@ -86,8 +88,8 @@ Inside each level folder:
 - `Docs/`: the PDFs and the build spec.
 - `Docs~/`: sources Unity ignores, such as `workbook/` and `entry-test/`.
 
-Each Level 2 game keeps its scripts in its own assemblies, one for runtime and one for
-the Editor, because the games share class names such as `SettingsMenu` and
+Each Level 2 and Level 3 game keeps its scripts in its own assemblies, one for runtime
+and one for the Editor, because the games share class names such as `SettingsMenu` and
 `CameraFollow`. Students never see this: in their own projects, scripts go in
 `Assets/Scripts`.
 
@@ -147,6 +149,35 @@ Again, sounds and a Web build.
   pass with 14) and the Firefly Catcher practical (75 minutes, pass with 70 out of 100).
   Two independent reviews checked it, and their fixes are in.
 
+### Level 3: Knight Run
+
+A knight runs, jumps and rolls through one long level in three sections painted on
+Tilemaps (the Meadow, the Autumn Woods, the Castle Walls). Green and purple slimes patrol,
+chase and leap; he stomps them or rolls into them. 5 health and a health bar, knockback
+and blinking, checkpoints, apples, 30 coins, a start screen, pause, win and lose screens,
+Restart without reloading, sound and music, and touch buttons on a phone. The art, sound
+and font are the **Brackeys Platformer Bundle** (CC0); Moayad chose it, and approved
+design version 2 (stomp and roll, no sword, every section painted step by step in the
+book).
+
+- **C# and Unity:** naming conventions; the Animation window, sprite-frame and property
+  clips; the Animator Controller, its parameters, and `SetFloat`, `SetInteger`, `SetBool`
+  and `SetTrigger` through `Animator.StringToHash`; Animation Events; state machines with
+  `enum`, `switch` and one `EnterState`; an enemy as a state machine; an Override
+  Controller; Tilemaps; UI health bars, panels and `Time.timeScale`; Event Triggers for
+  touch; `[System.Serializable]` plain classes; reading code, finding errors, kinds of
+  classes, and the User exam.
+- **The book** (228 pages) shows each script as it grows, 33 versions in all, and every
+  one compiles at its step: `Level3-Shared/Docs~/check-code.mjs` checks that with
+  Unity's own compiler, and that the 14 final cards match `Scripts/`.
+- **Checked in a copy of the project:** the scene builds with no errors or warnings, 15
+  play tests pass (running, jumping, rolling, stomping, hurting, pits, checkpoints,
+  pickups, Restart, the panels), and the screens were looked at. The Unity messages the
+  book quotes (Animator warnings, Animation Event errors, the null and missing-component
+  exceptions, `Time.timeScale` after Play mode) were copied from Unity 6000.6's Console.
+- **On the website**, locked with `COURSE_PW_LEVEL_3_KNIGHT_RUN`.
+- **Not done yet:** Moayad's own play-test in Unity.
+
 ### Entry tests (Levels 1 and 2)
 
 - Print each paper as **two sets**: Sections 1–2 (the cover and pages 1–7) and Section 3
@@ -160,8 +191,8 @@ Again, sounds and a Web build.
 ### PDFs: one builder for every level
 
 - `Level2-Shared/Docs~/pdf/build.mjs` and `style.css` build every PDF. There are copies in
-  `Level0/Docs~/workbook/` and `Level1/Docs~/workbook/`. The only difference is that
-  Levels 0 and 1 set code at 8.5 pt, and Level 2 at 7.8 pt.
+  `Level0/Docs~/workbook/`, `Level1/Docs~/workbook/` and `Level3-Shared/Docs~/pdf/`. The
+  only difference is that Levels 0 and 1 set code at 8.5 pt, and Levels 2 and 3 at 7.8 pt.
 - Fixed during the Level 2 work:
   - pages printed shrunk (at about 78% for Level 2 and 87% for Level 0);
   - the bundled fonts never loaded;
@@ -170,7 +201,7 @@ Again, sounds and a Web build.
   - keeps headings, lead-ins and short lists with what follows them;
   - lets long code cards and tables continue on the next page;
   - sets a chapter a little tighter when its last page would hold only a line or two.
-- **All nine PDFs were last built on this Mac** (1 October), so they match: Apple emoji,
+- **All ten PDFs were last built on this Mac** (1 October), so they match: Apple emoji,
   and Inter and JetBrains Mono at their real weights. Chrome on Linux sets the same book
   with Noto emoji, regular weights only and other line breaks, so build them all here.
   Built here, the Level 2 entry test is a cover and 10 pages; Section 3 still starts on
@@ -179,10 +210,10 @@ Again, sounds and a Web build.
 ### Website
 
 - Live at <https://apptrainers-curriculums.github.io/unity-programmer-curriculum-levels/>.
-- Levels 0 and 1 and all three Level 2 books are **published and password-protected**.
-  Each has its own secret: `COURSE_PW_LEVEL_0`, `COURSE_PW_LEVEL_1`,
-  `COURSE_PW_LEVEL_2_MINI_GOLF`, `COURSE_PW_LEVEL_2_SPACE_SHOOTER` and
-  `COURSE_PW_LEVEL_2_TANK_ARENA`.
+- Levels 0 and 1, all three Level 2 books and Level 3's Knight Run are **published and
+  password-protected**. Each has its own secret: `COURSE_PW_LEVEL_0`,
+  `COURSE_PW_LEVEL_1`, `COURSE_PW_LEVEL_2_MINI_GOLF`, `COURSE_PW_LEVEL_2_SPACE_SHOOTER`,
+  `COURSE_PW_LEVEL_2_TANK_ARENA` and `COURSE_PW_LEVEL_3_KNIGHT_RUN`.
 - Each level also has an unlisted "All the Code" page at `/code/<slug>/`.
 
 ### Project clean-up
@@ -197,37 +228,31 @@ Again, sounds and a Web build.
 
 ## 4. The state right now (1 October 2026)
 
-- **Everything is committed and pushed**, and the website is deployed. The latest
-  commits:
-  - `50ecd27`: `UnityAction\<float>` is escaped in the shared `ui-events.md`, so the
-    PDFs and the website no longer drop `<float>`. The three Level 2 books are
-    re-assembled, every PDF is rebuilt on this Mac (see "PDFs" in section 3), the PDF
-    builder's folder ignores `node_modules/` and `build/`, and the READMEs are up to date.
-  - `1cfdfa4`: the website's importer keeps a `\<` that a book already escaped.
-  - Then this file, and `Assets/Welcome/2d-template.png` moved into Git LFS. It was the
-    one PNG committed before the LFS rule, so git always listed it as modified.
-- The three Kenney zips are deleted from the project root: everything in them was
-  already unpacked into the games.
-- **Not committed yet:** `GAMES_PLAN.md` (new: the games for Levels 3–6, with Level 3
-  agreed and a core game per level), and this file's updates for it.
-- **Unity:**
-  - The editor was open when SampleScene was deleted. **Restart it**, so Build Settings
-    stop listing SampleScene.
-  - Build Settings list Launch, Catch, MiniGolf and SpaceShooter. **Tank Arena's scene
-    hasn't been built on this Mac yet:** run **Tools → Tank Arena (Level 2) → Build Scene**.
+- **Everything is committed and pushed**, and the website is deployed, Knight Run
+  included. The latest commits add Level 3's first game, Knight Run, with its book, and
+  put the book on the website.
+- **Unity:** Knight Run's **Build Scene** has been run on this Mac, so the project has
+  the `Ground`, `Knight` and `Enemy` layers and the Enemy–Enemy collision setting.
+  **Still to do:** Moayad's play-test, with the keyboard and the Device Simulator.
+- From earlier, still open: restart Unity after the SampleScene deletion, build the Tank
+  Arena scene on this Mac, and retest the Mini Golf fixes (section 7).
 
 ---
 
 ## 5. How to build and check
 
-**A Level 2 book.** Edit the game's `Docs~/workbook/book.md` or a shared chapter. Never
-edit `workbook.md`, which is generated.
+**A Level 2 or Level 3 book.** Edit the game's `Docs~/workbook/book.md` or a shared
+chapter. Never edit `workbook.md`, which is generated.
 
 ```bash
-cd Assets/Levels/Level2-Shared/Docs~
+cd Assets/Levels/Level2-Shared/Docs~      # or Level3-Shared/Docs~
 node assemble.mjs           # book.md + shared chapters → every game's workbook.md
 node assemble.mjs --check   # says whether every workbook.md is up to date
+node check-code.mjs         # Level 3 only: compiles every script version in the books
 ```
+
+`check-code.mjs` needs the project's `Library` (open the project in Unity once); with
+the editor open on this project, point it at a copy with `UNITY_PROJECT=…`.
 
 **A PDF.** You need Node and Google Chrome. Run `npm install` once in each builder folder.
 
@@ -252,6 +277,11 @@ node build.mjs ../entry-test/answer-key.md ../../Docs/Level1-Entry-Test-Answer-K
 cd Assets/Levels/Level0/Docs~/workbook
 npm install
 node build.mjs workbook.md ../../Docs/Level0-RocketLaunch-Workbook.pdf
+
+# Level 3: the books
+cd Assets/Levels/Level3-Shared/Docs~/pdf
+npm install
+node build.mjs ../../../Level3-KnightRun/Docs~/workbook/workbook.md ../../../Level3-KnightRun/Docs/Level3-KnightRun-Workbook.pdf
 ```
 
 What the builder prints:
@@ -273,7 +303,8 @@ The deploy fails if a protected level has no password secret. See `web/README.md
 
 **Code cards.** Every game's README (Levels 0–2) has a short Python snippet, under "Keep
 the code cards honest", that compares every ` ```csharp:File.cs ` card with `Scripts/`. Run
-it after changing a script or a card.
+it after changing a script or a card. Level 3's `check-code.mjs` does that and more: it
+also compiles every earlier version the book shows, at its step.
 
 **Scene builders.** These are instructor tools, run from Unity's **Tools** menu:
 
@@ -281,9 +312,13 @@ it after changing a script or a card.
 - **Tools → Catch the Falling Blocks (Level 1) → Build Scene**
 - **Tools → Mini Golf (Level 2) → Build Scene**, and the same for Space Shooter and Tank
   Arena
+- **Tools → Knight Run (Level 3) → Build Scene**
 
 Running a builder again overwrites its scene and prefabs. With the editor **closed**, you
-can also run a builder from the terminal. This hasn't been tried yet:
+can also run a builder from the terminal. With it **open**, the project is locked: clone it
+first (`cp -cR Assets Packages ProjectSettings Library <copy>`, which is instant on APFS)
+and run the builder, or PlayMode tests (`-runTests -testPlatform PlayMode`), in the copy.
+That's how Knight Run was built and tested:
 
 ```bash
 "/Applications/Unity/Hub/Editor/6000.6.3f1/Unity.app/Contents/MacOS/Unity" \
@@ -291,8 +326,8 @@ can also run a builder from the terminal. This hasn't been tried yet:
   -executeMethod TankArenaSceneBuilder.Build -quit -logFile -
 ```
 
-The other classes are `RocketSceneBuilder`, `CatchSceneBuilder`, `MiniGolfSceneBuilder`
-and `SpaceShooterSceneBuilder`. Each has a `Build()` method. A batch-mode run also
+The other classes are `RocketSceneBuilder`, `CatchSceneBuilder`, `MiniGolfSceneBuilder`,
+`SpaceShooterSceneBuilder` and `KnightRunSceneBuilder`. Each has a `Build()` method. A batch-mode run also
 compiles every script, so it doubles as a compile check that VS Code can run.
 
 **Not in the repo.** The cloud session had some helper scripts that were never moved here:
@@ -304,7 +339,8 @@ compiles every script, so it doubles as a compile check that VS Code can run.
 
 Now `book.md`, `Scripts/` and the specs are the source of truth. When a script changes,
 update by hand the earlier versions of it that the book shows, then check by following
-the book.
+the book (for Level 3, run `check-code.mjs`). Knight Run's chapter drafts were also put
+together outside the repo, into `book.md`: edit `book.md` from now on.
 
 ---
 
@@ -328,12 +364,15 @@ the book.
   - an earlier version of a script is an unnamed ` ```csharp ` block;
   - Console output is a plain fence right after the code.
 - **Steps:** a numbered step that continues after a code block keeps its number: write
-  `3.`, and it's drawn as step 3.
-- **Level 2 only:**
-  - shared chapters live in `Level2-Shared/Docs~/concepts/` and are included with
-    `{{concept:id}}`;
+  `3.`, and it's drawn as step 3. A step can hold a code block, but not a table: put the
+  table after the step, unindented.
+- **Levels 2 and 3:**
+  - shared chapters live in `Level2-Shared/Docs~/concepts/` or
+    `Level3-Shared/Docs~/concepts/` and are included with `{{concept:id}}`;
   - cross-references are `{{ref:id}}`;
-  - the ids are listed in `Level2-Shared/README.md`.
+  - the ids are listed in each shared folder's `README.md`.
+- **Quoted Unity messages** are copied from Unity's Console, never written from memory:
+  test them in a copy of the project first.
 - **Writing:** plain English, short sentences, second person, British spelling (`colour`).
   Explain the why, not only the what.
 - **Level limits:** each build spec lists the C# allowed at its level. Never use a topic
@@ -353,8 +392,8 @@ the book.
 
 **Assets**
 
-- The art is from Kenney's packs, which are CC0. Each `Art/` folder holds Kenney's
-  licence.
+- The art is from Kenney's packs, which are CC0, and, for Knight Run, the Brackeys
+  Platformer Bundle, also CC0. Each `Art/` folder holds its licence.
 - Space Shooter uses Kenney's sounds. The other games' sounds were made for the course.
 - **Downloading any asset needs Moayad's permission first.**
 
@@ -371,7 +410,10 @@ the book.
 2. **Level Reference:** fill in Level 2's row in "Next step: games per level" with Mini
    Golf, Space Shooter and Tank Arena and their topics. Do it in both the PDF and the
    claude.ai project doc.
-3. **Level 3, Junior-ready.** It ends at the Certified User: Programmer exam.
+3. **Level 3, Junior-ready.** It ends at the Certified User: Programmer exam. **Knight
+   Run is built and on the website** (section 3): next, Moayad's play-test. Then, one at
+   a time, each with its design shown to Moayad **before** building: the Level 3 entry
+   test, Crypt Keys and Gate Guard.
    - **Topics, from the Level Reference:**
      - state machines with `enum` + `switch`;
      - the Animator Controller: states, transitions, parameters, and `SetTrigger`,
@@ -388,13 +430,13 @@ the book.
         all four Animator parameter types, and Restart resets the level in code.
      2. Write the **Level 3 entry test**, which tests Level 2: a written paper and a
         practical task, with an answer key, as in `Level2-Shared/Docs~/entry-test/`.
-     3. For several games, copy Level 2's structure: a `Level3-Shared` folder for the
-        concept chapters, the assembler, the PDF builder (copy Level 2's) and the entry
-        test, plus one folder per game. Add each book to `web/levels.config.mjs`, and
-        add its password secret and its line in `deploy.yml`.
+     3. `Level3-Shared` exists, with the concept chapters, the assembler, the code
+        checker, the PDF builder and the builder kit; the entry test goes there too. Add
+        each new book to `web/levels.config.mjs`, with its password secret and its line
+        in `deploy.yml`.
 4. **Optional:**
    - Move the answer keys out of the repo if it's public.
-   - Add a small book checker to the repo, one that compiles each chapter's code.
+   - Add a book checker like Level 3's `check-code.mjs` for Levels 0–2.
 
 ---
 
@@ -440,6 +482,14 @@ the book.
   Mac, so they match. The Kenney zips were deleted, and `Assets/Welcome/2d-template.png`
   moved into Git LFS.
 
+- **Level 3, in VS Code (1 October):** you asked *"Let's start building Level 3, but i
+  want build game by game for level 3 and let me see the design before you start"*, chose
+  the art (*"for art we can use this one"*: the Brackeys Platformer Bundle), then
+  answered the design's questions: *"1 Approve"*, stomp and roll with this bundle only,
+  and *"3 step by step"* (paint every section in the book). Knight Run was built: the
+  game, the scene builder, the 12 C# Concept chapters, Check Yourself, the book and its
+  PDF, the code checker and the READMEs.
+
 ---
 
 ## 9. Working rules (for Claude)
@@ -450,8 +500,10 @@ the book.
 - **Ask before any download**, and before adding a package or an asset.
 - **Delete only what Moayad asked for.** A deleted file in this project can't be undone
   outside Git.
-- After editing a shared C# Concept chapter, **re-assemble the Level 2 books and rebuild
-  their PDFs**. The website reads `workbook.md`, so commit the assembled files too.
+- After editing a shared C# Concept chapter, **re-assemble that level's books and rebuild
+  their PDFs** (Level 3: run `check-code.mjs` too). The website reads `workbook.md`, so
+  commit the assembled files too.
+- **Show Moayad each game's design before building it**, one game at a time.
 - After changing `build.mjs` or `style.css`, copy the change to the other levels' builder
   folders, but keep Levels 0–1 at 8.5 pt code. Rebuild the PDFs it affects, and look at
   the pages.

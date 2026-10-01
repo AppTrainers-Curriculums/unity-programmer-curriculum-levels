@@ -91,6 +91,22 @@ export const levels = [
     protected: true,
     salt: '1c1f857e25565bc2b2a7a092f80f8c31',
   },
+  // Level 3 has three games too (Knight Run, then Crypt Keys and Gate Guard), each
+  // with a book that teaches every Level 3 topic, from the C# Concept chapters in
+  // Level3-Shared.
+  {
+    slug: 'level-3-knight-run',
+    src: 'Assets/Levels/Level3-KnightRun/Docs~/workbook/workbook.md',
+    shortName: 'Level 3 Knight Run',
+    introTitle: 'Before You Start',
+    sidebarLabel: 'Level 3 — Knight Run',
+    cardTitle: 'Level 3 — Knight Run',
+    cardDescription:
+      'Level 3 in 2D: a platformer with an animated knight, slimes that think in states, three sections painted with Tilemaps, checkpoints, a health bar, a pause menu and touch buttons. 15 build chapters and the 12 Level 3 C# Concept chapters, ending with practice for the Unity Certified User: Programmer exam.',
+    published: true,
+    protected: true,
+    salt: '4e89439e94f09d592be7fccdf8c4b54f',
+  },
 ];
 
 export const publishedLevels = levels.filter((l) => l.published);

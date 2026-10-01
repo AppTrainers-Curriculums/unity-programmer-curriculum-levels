@@ -60,6 +60,7 @@ jobs:
           COURSE_PW_LEVEL_2_MINI_GOLF: ${{ secrets.COURSE_PW_LEVEL_2_MINI_GOLF }}
           COURSE_PW_LEVEL_2_SPACE_SHOOTER: ${{ secrets.COURSE_PW_LEVEL_2_SPACE_SHOOTER }}
           COURSE_PW_LEVEL_2_TANK_ARENA: ${{ secrets.COURSE_PW_LEVEL_2_TANK_ARENA }}
+          COURSE_PW_LEVEL_3_KNIGHT_RUN: ${{ secrets.COURSE_PW_LEVEL_3_KNIGHT_RUN }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
