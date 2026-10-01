@@ -24,10 +24,15 @@ Level N's exit test is Level N+1's entry test.
 | 0 | Zero | Rocket Launch | Done |
 | 1 | Beginner | Catch the Falling Blocks | Done, with its entry test |
 | 2 | Builder | Mini Golf (3D), Space Shooter (2D), Tank Arena (2D) | Done, with its entry test |
-| 3 | Junior-ready | not chosen yet | **Next.** Ends at **Unity Certified User: Programmer** |
-| 4 | Junior | not chosen yet | Ends at **Unity Certified Associate: Programmer** |
-| 5 | Mid-level I | not chosen yet | |
-| 6 | Mid-level II | not chosen yet | |
+| 3 | Junior-ready | Agreed: **Knight Run** (core), Crypt Keys, Gate Guard | **Next.** Ends at **Unity Certified User: Programmer** |
+| 4 | Junior | Planned: **Arcane Duel** (core), Pocket Karts, Juice Tycoon | Ends at **Unity Certified Associate: Programmer** |
+| 5 | Mid-level I | Planned: **Lost Ruins** (core), Box Pusher, Tiny Colony (optional) | |
+| 6 | Mid-level II | Planned: **Card Table** (core), Arena Online (optional) | |
+
+The games for Levels 3–6 are in **`GAMES_PLAN.md`**, with a brief for each game and the
+recipe for building a level. Each level's **core game** is the best one for teaching all of
+the level, and the one to build first; a course with time for only one game per level
+teaches it.
 
 The topics of each level, with the exam objective each prepares for, are in the
 **Level Reference**: `Assets/Levels/Unity-Programmer-Curriculum-Levels.pdf`. It's also
@@ -203,6 +208,8 @@ Again, sounds and a Web build.
     one PNG committed before the LFS rule, so git always listed it as modified.
 - The three Kenney zips are deleted from the project root: everything in them was
   already unpacked into the games.
+- **Not committed yet:** `GAMES_PLAN.md` (new: the games for Levels 3–6, with Level 3
+  agreed and a core game per level), and this file's updates for it.
 - **Unity:**
   - The editor was open when SampleScene was deleted. **Restart it**, so Build Settings
     stop listing SampleScene.
@@ -376,8 +383,9 @@ the book.
        class types (MonoBehaviour, ScriptableObject, plain C#, ECS);
      - exam readiness.
    - **Steps:**
-     1. Propose the candidate games, and agree them with Moayad. Then build all of them,
-        as for Level 2.
+     1. The games are agreed (`GAMES_PLAN.md`): Knight Run (the core game), Crypt Keys
+        and Gate Guard. Build all three, in that order, as for Level 2. Every book uses
+        all four Animator parameter types, and Restart resets the level in code.
      2. Write the **Level 3 entry test**, which tests Level 2: a written paper and a
         practical task, with an answer key, as in `Level2-Shared/Docs~/entry-test/`.
      3. For several games, copy Level 2's structure: a `Level3-Shared` folder for the
