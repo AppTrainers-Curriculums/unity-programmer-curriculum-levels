@@ -4,7 +4,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
-import { levels } from '../levels.config.mjs';
+import { levels, downloads, downloadPath } from '../levels.config.mjs';
 import { readWorkbook, pageTitle, sidebarMeta } from './workbook.mjs';
 import { buildCodePage } from './code-page.mjs';
 
@@ -12,6 +12,8 @@ const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.join(__dirname, '..');
 const OUT = path.join(ROOT, 'src', 'content', 'docs');
 const CODE_OUT = path.join(OUT, 'code');
+const REPO = path.join(ROOT, '..');
+const PUBLIC = path.join(ROOT, 'public');
 
 // Split markdown into prose and fenced-code chunks, so the prose rewrites below
 // never touch code.
@@ -49,7 +51,24 @@ function callout(quote) {
   return `${CALLOUTS[m[1]]}\n${capitalise(body.slice(m[0].length))}\n:::`;
 }
 
+// The books never use raw HTML, but a type name in running text, such as
+// UnityAction<float> in an error message, would be read as an HTML tag and
+// vanish. Escape every tag-like `<` outside code spans (which show it as-is).
+const CODE_SPAN = /(`+)[\s\S]*?\1/g;
+const escapeTags = (s) => s.replace(/<(?=[A-Za-z/!])/g, '&lt;');
+
+function escapeTagsOutsideCode(text) {
+  let out = '';
+  let last = 0;
+  for (const m of text.matchAll(CODE_SPAN)) {
+    out += escapeTags(text.slice(last, m.index)) + m[0];
+    last = m.index + m[0].length;
+  }
+  return out + escapeTags(text.slice(last));
+}
+
 function transformProse(text) {
+  text = escapeTagsOutsideCode(text);
   text = text.replace(/^\\newpage.*$/gm, '');
 
   // Beat headings get an icon.
@@ -144,4 +163,20 @@ levels
     fs.rmSync(path.join(CODE_OUT, `${l.slug}.md`), { force: true });
   });
 levels.filter((l) => l.published).forEach(build);
+
+// The home page's downloads, copied from the Unity project. PDFs are in Git LFS:
+// without `git lfs pull`, the file on disk is a small text pointer, and copying
+// that would publish a broken PDF.
+fs.rmSync(path.join(PUBLIC, 'files'), { recursive: true, force: true });
+for (const d of downloads) {
+  const from = path.join(REPO, d.src);
+  const head = fs.readFileSync(from).subarray(0, 64).toString('latin1');
+  if (head.startsWith('version https://git-lfs')) {
+    throw new Error(`${d.src} is a Git LFS pointer, not the file: run  git lfs pull`);
+  }
+  const to = path.join(PUBLIC, downloadPath(d));
+  fs.mkdirSync(path.dirname(to), { recursive: true });
+  fs.copyFileSync(from, to);
+  console.log(`download: ${d.src} -> public/${downloadPath(d)}`);
+}
 console.log('import done ->', path.relative(ROOT, OUT));

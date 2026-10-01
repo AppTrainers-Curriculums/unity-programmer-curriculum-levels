@@ -1,13 +1,15 @@
 name: Deploy site to GitHub Pages
 
-# The site lives in web/ and is built from each level's workbook.md, so only
-# changes to those (not every Unity commit) trigger a deploy.
+# The site lives in web/ and is built from each level's workbook.md and the
+# curriculum PDF, so only changes to those (not every Unity commit) trigger a
+# deploy.
 on:
   push:
     branches: [main]
     paths:
       - 'web/**'
       - 'Assets/Levels/*/Docs~/workbook/workbook.md'
+      - 'Assets/Levels/Unity-Programmer-Curriculum-Levels.pdf'
       - '.github/workflows/deploy.yml'
   workflow_dispatch:
 
@@ -31,10 +33,10 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # PNGs are in Git LFS (see .gitattributes). Pull only the site's own,
-      # not the whole Unity project's.
+      # PNGs and PDFs are in Git LFS (see .gitattributes). Pull only the site's
+      # own and the curriculum PDF it serves, not the whole Unity project's.
       - name: Pull the site's LFS files
-        run: git lfs pull --include="web/**"
+        run: git lfs pull --include="web/**,Assets/Levels/Unity-Programmer-Curriculum-Levels.pdf"
         working-directory: .
       - name: Setup Node
         uses: actions/setup-node@v4
@@ -55,6 +57,9 @@ jobs:
           # One secret per protected level, named COURSE_PW_<SLUG>.
           COURSE_PW_LEVEL_0: ${{ secrets.COURSE_PW_LEVEL_0 }}
           COURSE_PW_LEVEL_1: ${{ secrets.COURSE_PW_LEVEL_1 }}
+          COURSE_PW_LEVEL_2_MINI_GOLF: ${{ secrets.COURSE_PW_LEVEL_2_MINI_GOLF }}
+          COURSE_PW_LEVEL_2_SPACE_SHOOTER: ${{ secrets.COURSE_PW_LEVEL_2_SPACE_SHOOTER }}
+          COURSE_PW_LEVEL_2_TANK_ARENA: ${{ secrets.COURSE_PW_LEVEL_2_TANK_ARENA }}
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:

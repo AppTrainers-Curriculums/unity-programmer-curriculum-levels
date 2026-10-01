@@ -54,6 +54,20 @@ drives the generated pages, the sidebar, and the home-page cards.
 The generated pages under `src/content/docs/` (everything except `index.mdx`)
 are **git-ignored**: they are rebuilt from the workbooks on every dev / build.
 
+## Downloads
+
+The home page also links files the site serves as they are, listed in
+`downloads` in `levels.config.mjs`. Today that's the curriculum overview,
+`Assets/Levels/Unity-Programmer-Curriculum-Levels.pdf`. `scripts/import.mjs`
+copies each one into `public/files/` (git-ignored) on every build, so the site
+always serves the copy in the Unity project: replace the PDF there, push, and
+the site follows. Downloads are **public**, never password-protected: don't list
+a trainer-only file.
+
+PDFs are in Git LFS: the deploy workflow pulls the curriculum PDF along with
+`web/`'s own files. A new download needs adding to that `git lfs pull` line and
+the workflow's `paths`, too.
+
 ## Develop
 
 ```bash
@@ -100,10 +114,20 @@ student enters the password once per level.
 Passwords are **never** committed. Each protected level reads its password from
 an environment variable **`COURSE_PW_<SLUG>`** (slug uppercased, `-` → `_`):
 
-| Level     | Env var / secret    |
-| --------- | ------------------- |
-| `level-0` | `COURSE_PW_LEVEL_0` |
-| `level-1` | `COURSE_PW_LEVEL_1` |
+| Level                   | Env var / secret                  |
+| ----------------------- | --------------------------------- |
+| `level-0`               | `COURSE_PW_LEVEL_0`               |
+| `level-1`               | `COURSE_PW_LEVEL_1`               |
+| `level-2-mini-golf`     | `COURSE_PW_LEVEL_2_MINI_GOLF`     |
+| `level-2-space-shooter` | `COURSE_PW_LEVEL_2_SPACE_SHOOTER` |
+| `level-2-tank-arena`    | `COURSE_PW_LEVEL_2_TANK_ARENA`    |
+
+Level 2 has three books, one per game (Mini Golf, Space Shooter, Tank Arena),
+each its own entry in `levels.config.mjs` with its own secret. The three can
+share a password: give each secret the same value. Their `workbook.md` files are
+assembled from each game's `book.md` and the shared C# Concept chapters (see
+`Assets/Levels/Level2-Shared/README.md`): re-assemble and commit them after
+editing a shared chapter, or the site keeps the old text.
 
 - **In CI:** add each as a GitHub **repository secret**
   (Settings → Secrets and variables → Actions → New repository secret). The

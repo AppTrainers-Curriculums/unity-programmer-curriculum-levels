@@ -49,9 +49,68 @@ export const levels = [
     protected: true,
     salt: 'acefee769687200f44a527e938277443',
   },
+  // Level 2 has three games, each with a book that stands alone and teaches every
+  // Level 2 topic (they share the C# Concept chapters, in Level2-Shared). A trainer
+  // runs one of them, or gives different groups different ones.
+  {
+    slug: 'level-2-mini-golf',
+    src: 'Assets/Levels/Level2-MiniGolf/Docs~/workbook/workbook.md',
+    shortName: 'Level 2 Mini Golf',
+    introTitle: 'Before You Start',
+    sidebarLabel: 'Level 2 — Mini Golf',
+    cardTitle: 'Level 2 — Mini Golf',
+    cardDescription:
+      'Level 2 in 3D: three holes of mini golf, a ball you aim and putt with a drag, a camera that follows it, golf scores and a scorecard, settings, and a Web build you can play with a finger. 15 build chapters and the 15 Level 2 C# Concept chapters, ending with exam-style practice.',
+    published: true,
+    protected: true,
+    salt: 'e986a094b7a6b5ebdf71655a88971746',
+  },
+  {
+    slug: 'level-2-space-shooter',
+    src: 'Assets/Levels/Level2-SpaceShooter/Docs~/workbook/workbook.md',
+    shortName: 'Level 2 Space Shooter',
+    introTitle: 'Before You Start',
+    sidebarLabel: 'Level 2 — Space Shooter',
+    cardTitle: 'Level 2 — Space Shooter',
+    cardDescription:
+      'Level 2 in 2D: a shooter with five waves of enemies, power-ups, explosions, camera shake, a start screen, settings, and controls that work with a finger on a phone. 14 build chapters and the 15 Level 2 C# Concept chapters, ending with exam-style practice.',
+    published: true,
+    protected: true,
+    salt: '6dbfb31e1d537d762a3ffd30d4557a39',
+  },
+  {
+    slug: 'level-2-tank-arena',
+    src: 'Assets/Levels/Level2-TankArena/Docs~/workbook/workbook.md',
+    shortName: 'Level 2 Tank Arena',
+    introTitle: 'Before You Start',
+    sidebarLabel: 'Level 2 — Tank Arena',
+    cardTitle: 'Level 2 — Tank Arena',
+    cardDescription:
+      'Level 2 in 2D, seen from above: a tank battle with four rounds of enemy tanks that see you and fire, repair kits, explosions, a follow camera, settings, and touch controls. 15 build chapters and the 15 Level 2 C# Concept chapters, ending with exam-style practice.',
+    published: true,
+    protected: true,
+    salt: '1c1f857e25565bc2b2a7a092f80f8c31',
+  },
 ];
 
 export const publishedLevels = levels.filter((l) => l.published);
+
+// Files the site serves as they are, linked from the home page. scripts/import.mjs
+// copies each one from the Unity project into public/files/ on every build, so
+// there is one copy to keep up to date. Public: never list a protected or
+// trainer-only file here.
+export const downloads = [
+  {
+    // Relative to the repo root.
+    src: 'Assets/Levels/Unity-Programmer-Curriculum-Levels.pdf',
+    title: 'The curriculum at a glance (PDF)',
+    description:
+      'All seven levels, from zero coding to mid-level: what each one teaches in C# and in Unity, and how they lead to the Unity Certified User and Certified Associate programmer exams.',
+  },
+];
+
+// Where a download is served, relative to the site base.
+export const downloadPath = (d) => `files/${d.src.split('/').pop()}`;
 
 export const stripMd = (s) => s.replace(/[`*]/g, '').trim();
 export const slugify = (s) =>

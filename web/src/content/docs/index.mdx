@@ -10,9 +10,22 @@ hero:
 ---
 
 import { Card, CardGrid, LinkCard } from '@astrojs/starlight/components';
-import { publishedLevels, introPath } from '../../../levels.config.mjs';
+import { publishedLevels, introPath, downloads, downloadPath } from '../../../levels.config.mjs';
 
 export const url = (p) => import.meta.env.BASE_URL.replace(/\/?$/, '/') + p;
+export const level2 = publishedLevels.filter((l) => l.slug.startsWith('level-2-'));
+
+## The curriculum
+
+Seven levels take a student from never having written code to mid-level Unity
+programming. Each level teaches a set of C# and Unity topics through games built
+for them.
+
+<CardGrid>
+  {downloads.map((d) => (
+    <LinkCard key={d.src} title={d.title} description={d.description} href={url(downloadPath(d))} />
+  ))}
+</CardGrid>
 
 ## Levels
 
@@ -30,6 +43,13 @@ export const url = (p) => import.meta.env.BASE_URL.replace(/\/?$/, '/') + p;
     />
   ))}
 </CardGrid>
+
+{level2.length > 1 && (
+  <p>
+    Level 2 comes as {level2.length} games. Each book teaches every Level 2 topic,
+    so you follow the one your trainer picks.
+  </p>
+)}
 
 ## How the levels work
 

@@ -12,3 +12,6 @@ src/content/docs/*
 
 # os
 .DS_Store
+
+# copied from the Unity project by scripts/import.mjs (levels.config.mjs → downloads)
+public/files/
