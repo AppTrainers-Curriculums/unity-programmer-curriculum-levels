@@ -1,0 +1,412 @@
+/* ===================================================================
+   Checkers Student Workbook — AppTrainers brand
+   Palette: white page, coral-red + slate, cool light-gray cards.
+   =================================================================== */
+
+:root {
+  --ink:        #3E4655;   /* slate headings */
+  --ink-soft:   #515B6B;   /* body text */
+  --muted:      #8A93A1;
+  --paper:      #FFFFFF;
+  --card:       #F7F8FA;   /* cool light-gray card */
+  --card-2:     #FCFCFD;
+  --line:       #ECEDF1;
+  --red:        #EC4A5A;
+  --red-dark:   #D6394A;
+  --red-soft:   #FCEBEE;
+
+  --code-bg:    #2A2F3A;
+  --code-bar:   #20242E;
+  --code-fg:    #E6E9F0;
+  --code-line:  #626B7C;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink-soft);
+  font-family: 'Inter', -apple-system, sans-serif;
+  font-size: 10.6pt;
+  line-height: 1.72;
+  -webkit-font-smoothing: antialiased;
+}
+
+p { margin: 0 0 0.75em; }
+strong { color: var(--ink); font-weight: 600; }
+em { color: var(--ink-soft); }
+
+/* No space after the last block: space that doesn't fit on the last page would
+   start a blank one. */
+.content { padding: 2mm 0 0; }
+.content > :last-child, .content > :last-child > :last-child { margin-bottom: 0; }
+
+/* ---------- Headings ---------- */
+h1, h2, h3, h4 {
+  font-family: 'Poppins', sans-serif;
+  color: var(--ink);
+  line-height: 1.2;
+  margin: 0;
+}
+
+/* Part divider — its own page */
+.part {
+  position: relative;
+  page-break-before: always;
+  break-before: page;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 232mm;
+  overflow: hidden;
+  page-break-after: always;
+  break-after: page;
+}
+.part.first { page-break-before: avoid; break-before: avoid; }
+.part .kicker {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 10pt;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--red);
+  margin-bottom: 10px;
+}
+.part h1 {
+  font-weight: 800;
+  font-size: 34pt;
+  letter-spacing: -0.5px;
+  max-width: 15ch;
+}
+.part .rule {
+  width: 68px; height: 5px; border-radius: 3px;
+  background: var(--red);
+  margin: 22px 0 18px;
+}
+
+/* Chapter header — new page */
+.chapter {
+  page-break-before: always;
+  break-before: page;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin: 0 0 6px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--line);
+}
+.chapter .num {
+  flex: 0 0 auto;
+  width: 52px; height: 52px;
+  border-radius: 14px;
+  background: linear-gradient(150deg, var(--red), var(--red-dark));
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 800;
+  font-size: 19pt;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 5px 14px rgba(236,74,90,0.26);
+}
+.chapter .titles .eyebrow {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 700;
+  font-size: 8.5pt;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--red);
+}
+.chapter h2 { font-weight: 700; font-size: 18pt; margin-top: 2px; }
+
+h3.plain {
+  font-weight: 600;
+  font-size: 13pt;
+  color: var(--ink);
+  margin: 22px 0 8px;
+}
+h2.section {
+  page-break-before: auto;
+  font-weight: 700;
+  font-size: 15pt;
+  margin: 26px 0 10px;
+  padding-left: 12px;
+  border-left: 4px solid var(--red);
+}
+
+/* ---------- Beat badges ---------- */
+.beat {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 22px 0 10px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 12.5pt;
+  color: var(--ink);
+}
+.beat .chip {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 15px;
+  flex: 0 0 auto;
+}
+.beat .beat-extra { color: var(--muted); font-weight: 500; font-size: 10.5pt; }
+
+/* ---------- Goal banner ---------- */
+.goal {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  background: var(--red-soft);
+  border: 1px solid #F6D6DB;
+  border-left: 5px solid var(--red);
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin: 4px 0 18px;
+}
+.goal .ico { font-size: 18px; line-height: 1.4; }
+.goal .txt { font-size: 10.6pt; }
+.goal .txt b {
+  font-family: 'Poppins', sans-serif;
+  color: var(--red-dark);
+  font-weight: 700;
+}
+
+/* ---------- Callout (blockquote) ---------- */
+.callout {
+  display: flex;
+  gap: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 13px 16px;
+  margin: 14px 0;
+  font-size: 10.2pt;
+}
+.callout .ico { font-size: 17px; flex: 0 0 auto; }
+.callout p:last-child { margin-bottom: 0; }
+.callout strong { color: var(--red-dark); }
+
+/* ---------- Lists ---------- */
+ul, ol { margin: 8px 0 14px; padding-left: 0; list-style: none; counter-reset: li; }
+ul > li, ol > li {
+  position: relative;
+  padding-left: 30px;
+  margin: 7px 0;
+}
+ul > li::before {
+  content: '';
+  position: absolute; left: 6px; top: 0.62em;
+  width: 7px; height: 7px; border-radius: 2px;
+  background: var(--red);
+  transform: rotate(45deg);
+}
+ol > li { counter-increment: li; }
+ol > li::before {
+  content: counter(li);
+  position: absolute; left: 0; top: 0.12em;
+  width: 20px; height: 20px;
+  background: var(--red);
+  color: #fff;
+  border-radius: 6px;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 8.5pt;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* ---------- Inline code ---------- */
+:not(pre) > code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.86em;
+  white-space: pre-wrap;      /* keep runs of spaces ("Score: 7   Time: 12.4") */
+  background: var(--red-soft);
+  color: var(--red-dark);
+  padding: 1px 6px;
+  border-radius: 5px;
+  border: 1px solid #F6D6DB;
+}
+
+/* ---------- Code card (editor look) ---------- */
+.code-card {
+  margin: 14px 0 18px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #E4E6EB;
+  break-inside: avoid;
+}
+/* A card taller than half a page (build.mjs adds .long) continues on the next
+   page instead of leaving a big gap; its title bar stays with the first lines. */
+.code-card.long { break-inside: auto; }
+.code-card .bar { break-after: avoid; }
+.code-card .bar {
+  background: var(--code-bar);
+  padding: 9px 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.code-card .dot { width: 11px; height: 11px; border-radius: 50%; }
+.code-card .dot.r { background: #FF5F57; }
+.code-card .dot.y { background: #FEBC2E; }
+.code-card .dot.g { background: #28C840; }
+.code-card .file {
+  display: flex; width: 100%; align-items: center;
+  margin-left: 8px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.6pt;
+  color: #AEB4C2;
+}
+.code-card .file .lang {
+  margin-left: auto;
+  color: #F0808C;
+  font-weight: 600;
+}
+/* no line numbers, so the code copies cleanly from the PDF; long lines wrap */
+.code-card .code {
+  margin: 0;
+  background: var(--code-bg);
+  padding: 13px 16px 14px;
+}
+.code-card .code code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 7.8pt;           /* about 100 characters to a line */
+  line-height: 1.62;
+  color: var(--code-fg);
+  white-space: pre-wrap;      /* wrap long lines instead of clipping */
+  overflow-wrap: anywhere;
+  tab-size: 2;
+  display: block;
+}
+
+/* highlight.js — dark theme */
+.hljs-comment, .hljs-quote { color: #7B8496; font-style: italic; }
+.hljs-keyword, .hljs-built_in, .hljs-literal { color: #E58C6B; }
+.hljs-type, .hljs-class .hljs-title, .hljs-title.class_ { color: #E6C07B; }
+.hljs-string { color: #98C379; }
+.hljs-number { color: #D19A66; }
+.hljs-title, .hljs-title.function_ { color: #61AFEF; }
+.hljs-params { color: var(--code-fg); }
+.hljs-attr, .hljs-property { color: #56B6C2; }
+.hljs-meta { color: #7B8496; }
+.hljs-punctuation { color: #ABB2BF; }
+
+/* ---------- Diagram block (ASCII art) ---------- */
+.diagram {
+  margin: 14px 0 18px;
+  background: var(--card-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 18px;
+  break-inside: avoid;
+}
+.diagram pre {
+  margin: 0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 8.3pt;
+  line-height: 1.5;
+  color: var(--ink);
+  white-space: pre-wrap;      /* a long Console line wraps instead of widening the page */
+  overflow-wrap: anywhere;
+}
+
+hr {
+  border: 0;
+  border-top: 1px dashed var(--line);
+  margin: 22px 0;
+}
+
+/* end-of-sample note */
+.endnote {
+  margin-top: 26px;
+  padding: 16px 18px;
+  background: var(--ink);
+  color: #E7E9EE;
+  border-radius: 12px;
+  font-size: 10pt;
+}
+.endnote b { color: #FF8B96; }
+
+/* ---- tables (mapping browser ⇄ Unity, tuning values) ------------------ */
+table.tbl {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 14px 0 18px;
+  font-size: 9.6pt;
+  break-inside: avoid;        /* a table moves whole to the next page… */
+}
+/* …unless it's taller than a third of a page (build.mjs adds .long): then it
+   continues there, never splitting a row, and never leaving a single row on
+   either page. */
+table.tbl.long { break-inside: auto; }
+table.tbl tr { break-inside: avoid; }
+table.tbl.long tbody tr:nth-child(2), table.tbl.long tbody tr:last-child { break-before: avoid; }
+table.tbl th {
+  background: var(--ink);
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 9pt;
+  text-align: left;
+  padding: 7px 11px;
+}
+table.tbl th:first-child { border-top-left-radius: 6px; }
+table.tbl th:last-child  { border-top-right-radius: 6px; }
+table.tbl td {
+  padding: 7px 11px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+table.tbl tbody tr:nth-child(even) { background: var(--card-2); }
+table.tbl code { white-space: pre-wrap; }   /* wraps at spaces and after dots, never widens the page */
+
+/* C# concept chapters (## C# N — Title): slate instead of red */
+.chapter.cs .num {
+  background: linear-gradient(150deg, #4A5364, var(--ink));
+  box-shadow: 0 5px 14px rgba(62,70,85,0.26);
+}
+.chapter.cs .titles .eyebrow { color: var(--ink); }
+
+/* ---- keep headings and lead-ins with what follows ------------------------ */
+h2.section, h3.plain, h4.plain, .beat { break-after: avoid; }
+p:has(+ .code-card), p:has(+ table.tbl), p:has(+ .diagram), p:has(+ ul), p:has(+ ol),
+ol:has(+ .code-card), ul:has(+ .code-card), ol:has(+ table.tbl), ul:has(+ table.tbl),
+ol:has(+ .diagram), ul:has(+ .diagram) { break-after: avoid; }
+
+/* A short bullet list (a question's options) stays whole, and so does a beat
+   label ("Idea", "Do it"…); a list item keeps its sub-list; a code card never
+   ends a page with just a line or two, or starts one with them. */
+ul:not(:has(> li:nth-child(5))) { break-inside: avoid; }
+.beat, .callout { break-inside: avoid; }
+/* A longer list may split, but never leaves one item alone on either page.
+   (Not for a one-item list: that would glue it to whatever comes before it.) */
+ul > li:nth-child(2), ol > li:nth-child(2),
+ul > li:last-child:not(:first-child), ol > li:last-child:not(:first-child) { break-before: avoid; }
+li > ul, li > ol { break-before: avoid; }
+.code-card .code code { widows: 4; orphans: 3; }
+
+/* ---- chapters set a little tighter ----------------------------------------
+   build.mjs puts each chapter in a <section class="seg">. When a chapter's last
+   page would hold only a few lines, it adds .tight and .t1 (then .t2): less
+   space between lines and blocks, until those lines fit on the page before. */
+.seg { position: relative; }
+a.pb { position: absolute; left: 0; width: 1px; height: 1px; }
+a.pb-s { top: 0; }
+a.pb-e { bottom: 0; }
+.seg.t1 { --t: 0.8;  --pm: 0.64em; line-height: 1.64; --code-lh: 1.56; }
+.seg.t2 { --t: 0.65; --pm: 0.6em;  line-height: 1.58; --code-lh: 1.5; }
+.seg.tight p { margin-bottom: var(--pm); }
+.seg.tight .callout p:last-child { margin-bottom: 0; }
+.seg.tight .beat { margin: calc(22px * var(--t)) 0 calc(10px * var(--t)); }
+.seg.tight h3.plain { margin: calc(22px * var(--t)) 0 calc(8px * var(--t)); }
+.seg.tight .goal { margin-bottom: calc(18px * var(--t)); }
+.seg.tight .code-card, .seg.tight .diagram, .seg.tight table.tbl { margin: calc(14px * var(--t)) 0 calc(18px * var(--t)); }
+.seg.tight .callout { margin: calc(14px * var(--t)) 0; }
+.seg.tight ul, .seg.tight ol { margin: calc(8px * var(--t)) 0 calc(14px * var(--t)); }
+.seg.tight ul > li, .seg.tight ol > li { margin: calc(7px * var(--t)) 0; }
+.seg.tight table.tbl td, .seg.tight table.tbl th { padding-top: calc(7px * var(--t)); padding-bottom: calc(7px * var(--t)); }
+.seg.tight .code-card .code code { line-height: var(--code-lh); }

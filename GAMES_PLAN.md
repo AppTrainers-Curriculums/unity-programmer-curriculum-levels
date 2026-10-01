@@ -79,9 +79,10 @@ which is what the Associate exam assumes.
 trainer can teach any one game. The games differ; the topics don't. **Level 5 is the
 exception:** only its core game, Lost Ruins, teaches all of it (see Level 5).
 
-**Art and sound:** Kenney's CC0 packs again, where a pack fits. **Ask Moayad before any
-download.** If a pack has no animation frames, animate properties instead (position,
-rotation, scale, colour): that teaches the Animation window just as well.
+**Art and sound:** CC0 packs, such as Kenney's, where a pack fits; Knight Run uses the
+Brackeys Platformer Bundle. **Ask Moayad before any download.** If a pack has no
+animation frames, animate properties instead (position, rotation, scale, colour): that
+teaches the Animation window just as well.
 
 ---
 
@@ -145,43 +146,54 @@ with Moayad on 1 October 2026.
 
 ### Knight Run — 2D platformer
 
-**Pitch:** a small knight runs and jumps through one long level in three sections, with
-checkpoints between them. He slashes slimes and bats, collects coins and hearts, and
-reaches the flag.
+**Pitch:** a small knight runs, jumps and rolls through one long level in three sections,
+with a checkpoint sign between them. He stomps on slimes or rolls into them, collects
+coins and apples, and walks into the castle door at the far end. The design was approved
+on 1 October 2026; `Level3-KnightRun/Docs/KNIGHTRUN_BUILD_SPEC.md` has every detail.
 
+- **Art:** the Brackeys Platformer Bundle (CC0), Moayad's choice: the knight, green and
+  purple slimes, coins, fruit, platforms, a four-season tileset, 6 sounds, music and a
+  pixel font.
 - **Controls:**
-  - keyboard: A / D or the arrows to run, Space to jump, J or a click to attack;
-  - touch: four on-screen buttons (left, right, jump, attack).
+  - keyboard: A / D or the arrows to run, Space to jump, Shift or J to roll;
+  - touch: four on-screen buttons (left, right, jump, roll).
 - **Player:**
   - a Rigidbody 2D and a Capsule Collider 2D;
-  - a ground check with a raycast;
-  - 5 health; a pit costs 1 health and sends the knight back to the last checkpoint.
+  - a ground check with two raycasts;
+  - 5 health; falling into water, goo or the moat costs 1 health and sends the knight
+    back to the last checkpoint;
+  - a stomp (landing on a slime hits it) and a roll (slimes can't hurt him, and any
+    slime he rolls into is hit).
 - **Animator (the knight):**
-  - states: Idle, Run, Jump, Fall, Attack, Hurt and Dead;
-  - parameters: `Speed` (float), `Grounded` (bool), `VerticalSpeed` (float), and `Attack`,
+  - states: Idle, Run, Jump, Fall, Roll, Hurt and Dead;
+  - parameters: `Speed` and `VerticalSpeed` (floats), `Grounded` (bool), and the `Roll`,
     `Hurt` and `Dead` triggers;
-  - transition settings that matter: Has Exit Time on for Attack only, and short
-    transition times. These are the "clips and property settings" the exam asks about.
+  - transition settings that matter: Has Exit Time on only out of Roll and Hurt, and a
+    Transition Duration of 0. These are the "clips and property settings" the exam asks
+    about.
 - **Animation Events:**
-  - the Attack clip's hit frame calls `OnAttackHit()`, which damages enemies in front of
-    the knight;
+  - the Roll clip's last frame calls `OnRollFinished()`;
   - the Run clip calls `OnFootstep()`;
-  - the end of the Dead clip calls `OnDeathFinished()`.
-- **Enemies as state machines,** each a script with `enum State` and a `switch`:
-  - **Slime:** Patrol → Chase (when the player is near) → Attack → Hurt → Dead. Its
-    Animator follows the code through a `State` int: each state's enter step calls
-    `SetInteger("State", (int)state)`. That ties the code's state machine to the
-    Animator's, and gives the book its Int parameter;
-  - **Bat:** Sleep → Swoop → Return.
+  - the end of the Dead clip calls `OnDeathFinished()`;
+  - the slime's WindUp clip calls `OnLeap()`.
+- **Enemies as state machines:** one `Slime` script with `enum State` and a `switch`:
+  Patrol → Chase → WindUp → Leap, plus Hurt and Dead. Its Animator follows the code
+  through a `State` int: each state's enter step calls `SetInteger("State", (int)state)`.
+  That ties the code's state machine to the Animator's, and gives the book its Int
+  parameter. The purple slime is the same script with other numbers, and an Animator
+  Override Controller for its clips.
 - **Other objects:**
-  - coins and hearts;
-  - a checkpoint flag with its own small Animator: Lowered → Raised, on a trigger;
+  - coins and apples;
+  - checkpoint signposts with their own small Animator: Unlit → Lighting → Lit, on a `Lit`
+    bool, with property clips only;
+  - the castle door at the end, painted from tiles;
   - a camera-follow script.
 - **Game states:** Start, Playing, Paused, Won and Lost. The UI shows a health bar, a coin
-  count, a pause menu (Resume, Restart, Settings), and start, win and lose panels.
-- **Suggested scripts:** `KnightController`, `KnightCombat`, `KnightHealth`, `Slime`,
-  `Bat`, `Coin`, `Heart`, `Checkpoint`, `KillZone`, `CameraFollow`, `PlatformerGame`,
-  `HealthBar` and `PauseMenu`.
+  count and the section's name, a pause menu (Resume, Restart, Volume), and start, win
+  and lose panels.
+- **Scripts:** `KnightController`, `KnightCombat`, `KnightHealth`, `Slime`, `Coin`,
+  `Apple`, `Checkpoint`, `CastleDoor`, `KillZone`, `CameraFollow`, `Section`,
+  `PlatformerGame`, `HealthBar` and `PauseMenu`.
 - **Objectives covered:** U 2.3, U 3.3 (Animation Event errors), U 4.3 and U 4.4, plus
   every Level 3 C# topic.
 

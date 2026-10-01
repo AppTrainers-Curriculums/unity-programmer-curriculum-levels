@@ -19,9 +19,9 @@ TagManager:
   - Course
   - Player
   - Walls
-  - 
-  - 
-  - 
+  - Ground
+  - Knight
+  - Enemy
   - 
   - 
   - 
