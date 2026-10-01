@@ -63,7 +63,7 @@ Volume: 0.5
   call it later, every time its value changes.
 - The method's parameter must match the event: a slider sends a `float`. A
   method with the wrong parameter gives error CS1503: *Argument 1: cannot
-  convert from 'method group' to 'UnityEngine.Events.UnityAction<float>'*.
+  convert from 'method group' to 'UnityEngine.Events.UnityAction\<float>'*.
 - Add the listener in `OnEnable` and remove it in `OnDisable`
   ({{ref:events}}). Then a hidden settings panel doesn't react, and the pairs
   always match up.

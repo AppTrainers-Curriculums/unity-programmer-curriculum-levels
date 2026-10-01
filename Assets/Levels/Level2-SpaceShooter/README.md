@@ -79,4 +79,4 @@ It prints `MATCH` for all 11 scripts. The comparison is exact: one trailing spac
 
 ## The website
 
-`workbook.md` is also the source of the Space Shooter pages on the course site. The book is listed in `web/levels.config.mjs` with `published: false`. To publish it, add its password secret first, then set `published: true` (see `web/README.md`).
+`workbook.md` is also the source of the Space Shooter pages on the course site. They are published, and locked with the `COURSE_PW_LEVEL_2_SPACE_SHOOTER` repository secret (see `web/README.md`): push a re-assembled `workbook.md` and the site follows.

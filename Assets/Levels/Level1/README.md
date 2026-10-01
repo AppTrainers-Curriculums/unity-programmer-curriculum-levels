@@ -64,4 +64,4 @@ PY
 
 ## The website
 
-`workbook.md` is also the source of the Level 1 pages on the course site. Level 1 is listed in `web/levels.config.mjs` with `published: false`. To publish it, add the `COURSE_PW_LEVEL_1` repository secret, then set `published: true` (see `web/README.md`). The entry-test papers are not part of the site.
+`workbook.md` is also the source of the Level 1 pages on the course site. They are published, and locked with the `COURSE_PW_LEVEL_1` repository secret (see `web/README.md`): push a change to `workbook.md` and the site follows. The entry-test papers are not part of the site.
