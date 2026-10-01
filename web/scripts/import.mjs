@@ -53,9 +53,11 @@ function callout(quote) {
 
 // The books never use raw HTML, but a type name in running text, such as
 // UnityAction<float> in an error message, would be read as an HTML tag and
-// vanish. Escape every tag-like `<` outside code spans (which show it as-is).
+// vanish. Escape every tag-like `<` outside code spans (which show it as-is),
+// except one the book already escaped as `\<`: turning that into `\&lt;` would
+// print a literal "&lt;".
 const CODE_SPAN = /(`+)[\s\S]*?\1/g;
-const escapeTags = (s) => s.replace(/<(?=[A-Za-z/!])/g, '&lt;');
+const escapeTags = (s) => s.replace(/(?<!\\)((?:\\\\)*)<(?=[A-Za-z/!])/g, '$1&lt;');
 
 function escapeTagsOutsideCode(text) {
   let out = '';
