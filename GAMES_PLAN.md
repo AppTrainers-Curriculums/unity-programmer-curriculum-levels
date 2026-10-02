@@ -21,7 +21,7 @@ All game names are working titles.
 | 0 Zero | — | Rocket Launch | Built |
 | 1 Beginner | — | Catch the Falling Blocks | Built |
 | 2 Builder | — | Mini Golf (3D), Space Shooter (2D), Tank Arena (2D, top-down) | Built |
-| 3 Junior-ready | Unity Certified User: Programmer | **Knight Run** (2D platformer, core), **Crypt Keys** (2D dungeon crawler), **Gate Guard** (3D tower defence) | **In progress:** Knight Run, Crypt Keys and Gate Guard built; the entry test next |
+| 3 Junior-ready | Unity Certified User: Programmer | **Knight Run** (2D platformer, core), **Crypt Keys** (2D dungeon crawler), **Gate Guard** (3D tower defence) | Built |
 | 4 Junior | Unity Certified Associate: Programmer | **Arcane Duel** (card battler, core), **Pocket Karts** (3D kart racer), **Juice Tycoon** (idle tycoon) | Planned |
 | 5 Mid-level I | — | **Lost Ruins** (3D action adventure, core), **Box Pusher** (2D puzzle with undo), **Tiny Colony** (RTS-lite, optional) | Planned |
 | 6 Mid-level II | — | **Card Table** (online card game for mobile, core), **Arena Online** (real-time multiplayer, optional) | Planned |
@@ -310,14 +310,20 @@ changed from this plan.
 
 ### Level 3 entry test (it tests Level 2)
 
-- **Written paper:** 20 questions across the 15 Level 2 concept chapters.
-- **Practical: "Meteor Defence"**, suggested:
-  - meteors fall, and the player clicks or taps them to blast them, with a raycast at
-    the pointer;
-  - the game keeps a `List` of active meteors and spawns waves in a coroutine;
-  - a `Dictionary` holds the points for each size;
-  - the score is a property with a `private set`;
-  - a settings Slider (`onValueChanged`) sets the speed;
+Written and checked on 2 October 2026, from design version 1, which Moayad approved;
+`Assets/Levels/Level3-Shared/Docs/ENTRY_TEST_SPEC.md` has every detail.
+
+- **Written paper:** 20 questions across the 15 Level 2 concept chapters, checking every
+  line of Level 2's "Before Level 3: can you…" list.
+- **Practical: "Meteor Defence"**, 90 minutes:
+  - meteors fall at a city, and the player clicks or taps them to blast them
+    (`Pointer.current`, and `Physics2D.OverlapPoint` with a layer mask);
+  - the game keeps a `List` of the meteors in the sky, and runs three waves in a
+    coroutine, stopped with `StopCoroutine` when the city falls;
+  - a `Dictionary` holds the points for each size, and another counts the blasts;
+  - the score is a property with a `private set`, and the starting lives a `const`;
+  - a settings panel pauses the game, and its Slider (`onValueChanged.AddListener`)
+    sets the speed;
   - the end screen shows how many meteors of each size were blasted.
 
 ---

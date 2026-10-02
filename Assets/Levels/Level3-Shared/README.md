@@ -14,8 +14,12 @@ Level 3 ends at the **Unity Certified User: Programmer** exam, so its concept ch
 | `Docs~/check-code.mjs` | **The code checker:** compiles the code in each assembled book with Unity's own compiler, step by step, and compares each code card with the game's `Scripts/`. |
 | `Docs~/pdf/` | **The PDF builder:** `build.mjs`, `style.css`, `fonts.css` and `fonts/` (Inter, Poppins, JetBrains Mono), `package.json`. `build/` holds the HTML of its last run. |
 | `Editor/Level3BuilderKit.cs`, `Editor/Curriculum.Level3.Shared.Editor.asmdef` | **Instructor tool.** Static helpers for the games' scene builders, in an Editor-only assembly (not auto-referenced). |
+| `Docs/Level3-Entry-Test.pdf` | Student paper for the **Level 3 entry test**: a written paper and a practical task. |
+| `Docs/Level3-Entry-Test-Answer-Key.pdf` | **Trainer only.** The entry test's answers, marking rubric and model solution. |
+| `Docs/ENTRY_TEST_SPEC.md` | The entry test's spec: what it checks, the paper's blueprint, the practical, how it was checked. |
+| `Docs~/entry-test/` | Source of the two test papers (`test.md`, `answer-key.md`), and the model solution's scripts (`Meteor.cs`, `MeteorGame.cs`). |
 
-The `~` makes Unity ignore the `Docs~` folder. The Level 3 entry test, like Level 2's, will live here too (`Docs/` and `Docs~/entry-test/`); it isn't written yet.
+The `~` makes Unity ignore the `Docs~` folder. The Level 3 entry test lives here too, like Level 2's: see "The Level 3 entry test" below.
 
 ## The C# Concept chapters
 
@@ -111,6 +115,8 @@ npm install                  # first time only
 node build.mjs ../../../Level3-KnightRun/Docs~/workbook/workbook.md ../../../Level3-KnightRun/Docs/Level3-KnightRun-Workbook.pdf
 node build.mjs ../../../Level3-CryptKeys/Docs~/workbook/workbook.md ../../../Level3-CryptKeys/Docs/Level3-CryptKeys-Workbook.pdf
 node build.mjs ../../../Level3-GateGuard/Docs~/workbook/workbook.md ../../../Level3-GateGuard/Docs/Level3-GateGuard-Workbook.pdf
+node build.mjs ../entry-test/test.md ../../Docs/Level3-Entry-Test.pdf
+node build.mjs ../entry-test/answer-key.md ../../Docs/Level3-Entry-Test-Answer-Key.pdf
 ```
 
 Assemble first: the builder reads `workbook.md`, not `book.md`. It needs Google Chrome: `build.mjs` looks for it at the macOS path (`/Applications/Google Chrome.app/…`); anywhere else, set `CHROME_PATH`. It ends by printing `wrote <file> (N pages)`.
@@ -118,7 +124,25 @@ Assemble first: the builder reads `workbook.md`, not `book.md`. It needs Google 
 `build.mjs` and `style.css` here are copies of Level 2's (`../Level2-Shared/Docs~/pdf`), which describes in full what the builder does: Level 3 books use the same cover (`coverArt: image`, with `coverImage: cover.png` from the book's `Docs~/workbook/` folder), the same headers, and code at 7.8 pt. After changing either file in one place, copy it to the other, and to Levels 0 and 1 (keeping their 8.5 pt code). Two things to know when writing a book:
 
 - A numbered list step can hold a code block, but not a table: write the table after the step, unindented, and the next step (`2.`) keeps its number.
+- A test paper sets `keepCode: true` in its front matter, so every code card that fits on a page moves to the next page whole and no question's code is split; books leave it out. The entry test's cover is `coverArt: code` with `coverCode: level2`, a code editor showing Level 2 C#.
 - Each book's `cover.png` is a screenshot of its game, 1280 × 768: for Knight Run and Crypt Keys at a whole number of screen pixels for each art pixel, so pixel art stays sharp; for Gate Guard, a Play-mode shot of wave 10 with the HUD in it.
+
+## The Level 3 entry test
+
+Students join Level 3 by passing the **Level 3 entry test**, which tests Level 2 and checks every line of the "Before Level 3: can you…" list at the end of every Level 2 book. It lives here, shared by the three Level 3 games. `Docs/ENTRY_TEST_SPEC.md` describes it in full.
+
+| Part | Time | Marks | To pass |
+| --- | --- | --- | --- |
+| **Written paper:** 20 questions on Level 2 (properties and constructors, `static`, `const` and `readonly`, overloads and `out`, numbers and casts, arrays, lists and dictionaries, event functions, `GetComponent`, vectors, coroutines and `Time.timeScale`, the pointer, rays with masks, UI events, `null` and the debugger, the Scripting API) | 40 minutes | 20 | 14 |
+| **Practical task:** Meteor Defence, a small 2D game built from a description: meteors fall at a city, blasted with a click or a tap (`Pointer.current` and a masked `OverlapPoint`), waves from a coroutine and a `List`, points and counts in dictionaries, a `private set` score, a settings panel that pauses, with a Slider through `AddListener`, and `StopCoroutine` when the city falls | 90 minutes | 100 | 70 |
+
+- `Docs/Level3-Entry-Test.pdf`: the student paper, a cover and 14 pages. Sections 1–2 (the rules and the written paper) are pages 1–11, and Section 3 (the practical task) is pages 12–14, so trainers can print the written paper and the task as two sets, and hand out the task (with the Level 2 cheat sheet) only after collecting the written paper. Check this still holds after editing `test.md`: the answer key's "Before the test" list quotes those pages, and their PDF page numbers.
+- `Docs/Level3-Entry-Test-Answer-Key.pdf`: **trainer only**: how to run and mark the test, every answer with the Level 2 chapter to review, the practical's rubric, a model solution, what to do with each result, and changed numbers for retakes.
+- `Docs~/entry-test/`: their sources, and the model solution's two scripts. The key's code cards are copies of them, byte for byte; the scripts use only Level 2 C#, within Level 2's code rules.
+
+Every code answer in the key, and every retake answer, was run in Unity 6000.6, and the model solution was play-tested in a scene built from the paper's setup steps (the spec's section 6). After changing a question or the model solution, check it the same way, then rebuild both papers (the commands in "Building the PDFs" above). The entry test isn't part of the course site.
+
+> **Watch out:** the answer key is in the project like everything else. If the repository is ever made public, the key is public too: keep a trainer-only copy elsewhere, or leave the key out of the repository.
 
 ## The builder kit
 

@@ -24,7 +24,7 @@ Level N's exit test is Level N+1's entry test.
 | 0 | Zero | Rocket Launch | Done |
 | 1 | Beginner | Catch the Falling Blocks | Done, with its entry test |
 | 2 | Builder | Mini Golf (3D), Space Shooter (2D), Tank Arena (2D) | Done, with its entry test |
-| 3 | Junior-ready | **Knight Run** (core), then Crypt Keys and Gate Guard | **In progress:** Knight Run, Crypt Keys and Gate Guard are built; the entry test is next. Ends at **Unity Certified User: Programmer** |
+| 3 | Junior-ready | **Knight Run** (core), then Crypt Keys and Gate Guard | Done, with its entry test. Ends at **Unity Certified User: Programmer** |
 | 4 | Junior | Planned: **Arcane Duel** (core), Pocket Karts, Juice Tycoon | Ends at **Unity Certified Associate: Programmer** |
 | 5 | Mid-level I | Planned: **Lost Ruins** (core), Box Pusher, Tiny Colony (optional) | |
 | 6 | Mid-level II | Planned: **Card Table** (core), Arena Online (optional) | |
@@ -266,15 +266,46 @@ design version 1 with all six recommendations (*"All 6 approved"*).
 - **Not done yet:** Moayad's own play-test in Unity (he ran **Build Scene** on 2 October),
   and a Web build on a phone with a late wave.
 
-### Entry tests (Levels 1 and 2)
+### Level 3 entry test
 
-- Print each paper as **two sets**: Sections 1–2 (the cover and pages 1–7) and Section 3
-  (page 8 to the end).
+It tests Level 2, and checks every line of the "Before Level 3: can you…" list at the end
+of every Level 2 book. Moayad approved design version 1 with *"all approved"* (the spec
+is `Level3-Shared/Docs/ENTRY_TEST_SPEC.md`).
+
+- **The written paper:** 20 questions in 40 minutes, pass with 14. It covers properties and
+  constructors (one to write), `static`, `const` and `readonly`, overloads and `out`,
+  numbers and casts, lists and dictionaries, event functions, `GetComponent`, vectors,
+  coroutines and `Time.timeScale`, the pointer and the Simulator, rays with masks, UI
+  events, a `NullReferenceException` and the debugger, and a Scripting API entry.
+- **The practical, Meteor Defence:** 90 minutes, pass with 70 out of 100.
+  - Meteors fall at a city, and the student blasts them with a click or a tap.
+  - Waves come from a coroutine, with a `List` of the meteors in the sky.
+  - Points and counts per size live in dictionaries, and the score has a `private set`.
+  - A settings panel pauses the game, with a Slider connected through `AddListener`.
+  - `StopCoroutine` runs when the city falls.
+- **Checked:**
+  - Every code answer and retake answer was run in Unity 6000.6, and the compile
+    questions went through Unity's compiler.
+  - The model solution passes 10 play tests, in a scene built by following the setup
+    steps through Unity's own menus.
+  - Two independent reviews were done, and their fixes are in: one against the Level 2
+    chapters, one as a student and then a trainer.
+- **The time:** the student reviewer put the practical at 85 to 95 minutes for a good
+  student. It stays at the approved 90, and Moayad may want 105.
+- `Level3-Shared/Docs/Level3-Entry-Test.pdf` (a cover and 14 pages) and the trainer-only
+  `Level3-Entry-Test-Answer-Key.pdf` (a cover and 16 pages). Not on the website.
+
+### Entry tests (Levels 1 to 3)
+
+- Print each paper as **two sets**: Sections 1–2 and Section 3. That's the cover and pages
+  1–7, then page 8 to the end, for Levels 1 and 2; and the cover and pages 1–11, then
+  pages 12–14, for Level 3. A print dialog counts the cover as page 1: Level 3's key gives
+  the PDF page numbers.
 - Students get the practical task and the cheat sheet only **after** the trainer collects
   the written paper.
 - The answer keys are trainer-only. They are in the repo (`Level1/Docs`,
-  `Level2-Shared/Docs`) but not on the website. **If the GitHub repo is public, so are the
-  keys.**
+  `Level2-Shared/Docs`, `Level3-Shared/Docs`) but not on the website. **If the GitHub repo
+  is public, so are the keys.**
 
 ### PDFs: one builder for every level
 
@@ -303,7 +334,7 @@ design version 1 with all six recommendations (*"All 6 approved"*).
   `COURSE_PW_LEVEL_1`, `COURSE_PW_LEVEL_2_MINI_GOLF`, `COURSE_PW_LEVEL_2_SPACE_SHOOTER`,
   `COURSE_PW_LEVEL_2_TANK_ARENA`, `COURSE_PW_LEVEL_3_KNIGHT_RUN`,
   `COURSE_PW_LEVEL_3_CRYPT_KEYS` and `COURSE_PW_LEVEL_3_GATE_GUARD`. Crypt Keys and Gate
-  Guard go live with the next push.
+  Guard went live on 2 October.
 - Each level also has an unlisted "All the Code" page at `/code/<slug>/`.
 
 ### Project clean-up
@@ -318,9 +349,9 @@ design version 1 with all six recommendations (*"All 6 approved"*).
 
 ## 4. The state right now (2 October 2026)
 
-- **Committed, not pushed yet:** on 2 October, five commits add Crypt Keys and Gate
-  Guard, each with its book, put both books on the website (the site changes with the
-  next push), and fix Gate Guard's Start panel in the builder and the scene. Before them, everything was pushed and deployed, Knight Run included.
+- **Committed and pushed** (2 October): five commits add Crypt Keys and Gate Guard, each
+  with its book, put both books on the website, and fix Gate Guard's Start panel in the
+  builder and the scene. The website is deployed, with all three Level 3 books.
 - **Unity:** **Build Scene** has been run on this Mac for all three games (Knight Run on
   1 October, Crypt Keys and Gate Guard on 2 October, Gate Guard again after the Start
   panel fix), and its scenes are committed. So the project has the `Ground`,
@@ -343,6 +374,15 @@ design version 1 with all six recommendations (*"All 6 approved"*).
   truth now. Gate Guard was made in a Remote Control session, from Moayad's phone: its
   packs were downloaded to that session's scratch folder, and only the files the game
   uses were copied in.
+- **The Level 3 entry test is written, checked, committed and pushed** (section 3):
+  - `Level3-Shared/Docs~/entry-test/` (the paper, the key and the model solution);
+  - the two PDFs and the spec in `Level3-Shared/Docs/`;
+  - the shared README, and Level 2's README for the builder's two new options;
+  - the builder itself, in all four copies;
+  - this file and `GAMES_PLAN.md`.
+
+  The review page (https://claude.ai/artifact/CfHy5WP6FKQBPYe5CFAeTq) shows design version
+  1; the spec is the source of truth now, and its section 9 lists what changed.
 - `Assets/Levels/Level3-KnightRun/Art/Fonts/PixelOperator8 SDF.asset` shows as changed,
   and isn't committed: it's a dynamic font atlas, which grows whenever the Editor draws a
   letter it hasn't drawn before.
@@ -396,6 +436,8 @@ npm install
 node build.mjs ../../../Level3-KnightRun/Docs~/workbook/workbook.md ../../../Level3-KnightRun/Docs/Level3-KnightRun-Workbook.pdf
 node build.mjs ../../../Level3-CryptKeys/Docs~/workbook/workbook.md ../../../Level3-CryptKeys/Docs/Level3-CryptKeys-Workbook.pdf
 node build.mjs ../../../Level3-GateGuard/Docs~/workbook/workbook.md ../../../Level3-GateGuard/Docs/Level3-GateGuard-Workbook.pdf
+node build.mjs ../entry-test/test.md ../../Docs/Level3-Entry-Test.pdf
+node build.mjs ../entry-test/answer-key.md ../../Docs/Level3-Entry-Test-Answer-Key.pdf
 ```
 
 What the builder prints:
@@ -526,8 +568,10 @@ together outside the repo, into `book.md`: edit `book.md` from now on.
    claude.ai project doc.
 3. **Level 3, Junior-ready.** It ends at the Certified User: Programmer exam. **Knight
    Run, Crypt Keys and Gate Guard are built, committed, and their books published**
-   (section 3; the last two go live with the next push): next, Moayad's play-tests. Then
-   the Level 3 entry test, with its design shown to Moayad **before** it's written.
+   (section 3; all three are on the website), and **the Level 3 entry test is written**
+   (section 3). Next: Moayad's play-tests of the three games, and his look at the entry
+   test (and its practical's time). Then Level 4 (`GAMES_PLAN.md`), one game at a time,
+   each design shown first.
    - **Topics, from the Level Reference:**
      - state machines with `enum` + `switch`;
      - the Animator Controller: states, transitions, parameters, and `SetTrigger`,
@@ -542,7 +586,7 @@ together outside the repo, into `book.md`: edit `book.md` from now on.
      1. The games are agreed (`GAMES_PLAN.md`): Knight Run (the core game), Crypt Keys
         and Gate Guard. Build all three, in that order, as for Level 2. Every book uses
         all four Animator parameter types, and Restart resets the level in code.
-     2. Write the **Level 3 entry test**, which tests Level 2: a written paper and a
+     2. Done: the **Level 3 entry test**, which tests Level 2: a written paper and a
         practical task, with an answer key, as in `Level2-Shared/Docs~/entry-test/`.
      3. `Level3-Shared` exists, with the concept chapters, the assembler, the code
         checker, the PDF builder and the builder kit; the entry test goes there too. Add
@@ -630,7 +674,14 @@ together outside the repo, into `book.md`: edit `book.md` from now on.
   the new Chapter 15 step described the builder's scene, where the Start panel was on,
   not a student's, where Chapter 12 switches it off: the builder now switches it off too,
   and the chapter describes the student's scene (a fourth commit). You ran Gate Guard's
-  **Build Scene** again, and its scene was committed (a fifth).
+  **Build Scene** again, and its scene was committed (a fifth). You said *"push"*, and
+  the site went live with both books.
+- **The Level 3 entry test (2 October):** you said *"do it"*.
+  - Its design version 1 (the spec and a review page) was made from Level 2's own test
+    and the 15 Level 2 chapters, and you answered *"all approved"*.
+  - It was written, every answer was run in Unity, and the model solution was
+    play-tested. Two independent reviews followed, and their fixes are in.
+  - You said *"yes push it"*: committed and pushed.
 
 ---
 

@@ -296,10 +296,23 @@ function codeArtHtml(meta) {
   const k = (t) => `<b class="k">${t}</b>`, st = (t) => `<b class="s">${t}</b>`,
         n = (t) => `<b class="n">${t}</b>`, c = (t) => `<b class="c">${t}</b>`, ty = (t) => `<b class="t">${t}</b>`;
   // `coverCode: level1` in the front matter shows Level 1 code (arrays, loops,
-  // interpolation), for the Level 2 entry test; the default is Level 0's. It must
+  // interpolation), for the Level 2 entry test; `coverCode: level2` shows Level 2
+  // code (a List), for the Level 3 entry test; the default is Level 0's. It must
   // not show the answer to a question on the closed-book paper.
   const level1 = meta.coverCode === 'level1';
-  const lines = (level1 ? [
+  const level2 = meta.coverCode === 'level2';
+  const lines = (level2 ? [
+    `${c('// Blast report')}`,
+    `${ty('List')}&lt;${k('int')}&gt; blasts = ${k('new')} ${ty('List')}&lt;${k('int')}&gt;();`,
+    `blasts.Add(${n('50')});`,
+    `blasts.Add(${n('20')});`,
+    `${k('int')} score = ${n('0')};`,
+    `${k('foreach')} (${k('int')} points ${k('in')} blasts)`,
+    `{`,
+    `&nbsp;&nbsp;&nbsp;&nbsp;score += points * ${n('2')};`,
+    `}`,
+    `${ty('Debug')}.Log(${st('$"Score: {score}"')});`,
+  ] : level1 ? [
     `${c('// Catch report')}`,
     `${k('string')}[] tags = { ${st('"Block"')}, ${st('"GoldBlock"')} };`,
     `${k('int')} score = ${n('0')};`,
@@ -321,7 +334,7 @@ function codeArtHtml(meta) {
     `&nbsp;&nbsp;&nbsp;&nbsp;${ty('Debug')}.Log(rocketName + ${st('" is GO"')});`,
     `}`,
   ]).map((l, i) => `<div><span class="ln">${i + 1}</span>${l || '&nbsp;'}</div>`).join('');
-  const output = level1 ? 'Score: 14' : 'Falcon is GO';
+  const output = level2 ? 'Score: 140' : level1 ? 'Score: 14' : 'Falcon is GO';
   return `<div class="shot">
     <div class="screen codescene">
       <div class="ed"><div class="tabs"><span class="d r"></span><span class="d y"></span><span class="d g"></span><span class="fn">Practice.cs</span></div>
@@ -465,10 +478,12 @@ const TIGHTEST = 2;                        // .t1, then .t2
 
 // In the page: a code card taller than half a page, or a table taller than a
 // third of one, may continue on the next page (.long in style.css); shorter ones
-// move to the next page whole.
-function markLong(pageHeight) {
+// move to the next page whole. A paper with `keepCode: true` in its front matter
+// (the entry tests) keeps every code card that fits on a page whole, so no
+// question's code is split across two pages.
+function markLong(pageHeight, codeShare) {
   for (const el of document.querySelectorAll('.code-card, table.tbl')) {
-    const limit = el.matches('table') ? pageHeight / 3 : pageHeight / 2;
+    const limit = el.matches('table') ? pageHeight / 3 : pageHeight * codeShare;
     if (el.getBoundingClientRect().height > limit) el.classList.add('long');
   }
 }
@@ -536,7 +551,7 @@ async function renderContent(file, opts) {
   // Lay the page out as it prints.
   await page.emulateMediaType('print');
   await page.setViewport(BOX);
-  await page.evaluate(markLong, BOX.height);
+  await page.evaluate(markLong, BOX.height, String(meta.keepCode) === 'true' ? 1 : 0.5);
   const n = await page.evaluate(wrapChapters);
   const level = new Array(n).fill(0);
   const setLevels = () => page.evaluate((lv) => lv.forEach((l, k) => {
