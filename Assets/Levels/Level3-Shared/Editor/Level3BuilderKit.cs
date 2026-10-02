@@ -12,8 +12,8 @@ using UnityEngine.InputSystem.UI;
 using UnityEngine.Tilemaps;
 using UnityEngine.UI;
 
-// INSTRUCTOR TOOL: helpers shared by the Level 3 scene builders (Knight Run, and
-// Crypt Keys and Gate Guard to come). Not part of any student book, never in a build.
+// INSTRUCTOR TOOL: helpers shared by the Level 3 scene builders (Knight Run and
+// Crypt Keys, and Gate Guard to come). Not part of any student book, never in a build.
 public static class Level3BuilderKit
 {
     // ------------------------------------------------------------ project setup
@@ -227,8 +227,17 @@ public static class Level3BuilderKit
         return clip;
     }
 
-    // Imports a PNG as a single sprite with the given pixels per unit and pivot.
+    // Imports a PNG as one pixel-art sprite (Sprite Mode Single), as the book
+    // does by hand: the given Pixels Per Unit and pivot, Filter Mode Point, no
+    // compression and no mipmaps, and a 9-slice border in pixels (left,
+    // bottom, right, top), zero for a sprite that isn't sliced. It reimports
+    // only when something differs.
     public static Sprite ImportSprite(string path, float pixelsPerUnit, Vector2 pivot)
+    {
+        return ImportSprite(path, pixelsPerUnit, pivot, Vector4.zero);
+    }
+
+    public static Sprite ImportSprite(string path, float pixelsPerUnit, Vector2 pivot, Vector4 border)
     {
         var importer = (TextureImporter)AssetImporter.GetAtPath(path);
         if (importer == null)
@@ -243,17 +252,23 @@ public static class Level3BuilderKit
             || !Mathf.Approximately(importer.spritePixelsPerUnit, pixelsPerUnit)
             || settings.spriteAlignment != (int)SpriteAlignment.Custom
             || importer.spritePivot != pivot
+            || importer.spriteBorder != border
+            || importer.filterMode != FilterMode.Point
+            || importer.textureCompression != TextureImporterCompression.Uncompressed
             || importer.mipmapEnabled;
         if (changed)
         {
             importer.textureType = TextureImporterType.Sprite;
             importer.spriteImportMode = SpriteImportMode.Single;
             importer.spritePixelsPerUnit = pixelsPerUnit;
+            importer.filterMode = FilterMode.Point;
+            importer.textureCompression = TextureImporterCompression.Uncompressed;
             importer.mipmapEnabled = false;
             importer.ReadTextureSettings(settings);
             settings.spriteAlignment = (int)SpriteAlignment.Custom;
             importer.SetTextureSettings(settings);
             importer.spritePivot = pivot;
+            importer.spriteBorder = border;
             importer.SaveAndReimport();
         }
         return AssetDatabase.LoadAssetAtPath<Sprite>(path);
@@ -565,6 +580,14 @@ public static class Level3BuilderKit
             Debug.LogError("Missing sprite sheet: " + path);
             return new Sprite[0];
         }
+        return ImportSprites(path, GridCells(path, cellWidth, cellHeight), pixelsPerUnit, pivot);
+    }
+
+    // The cells of a grid with something in them, in the order Slice → Grid
+    // By Cell Size names them: left to right, top row first. Rectangles in
+    // pixels from the sheet's bottom-left corner.
+    public static List<Rect> GridCells(string path, int cellWidth, int cellHeight)
+    {
         var pixels = new Texture2D(2, 2);
         pixels.LoadImage(File.ReadAllBytes(path));
         Color32[] colours = pixels.GetPixels32();
@@ -586,7 +609,7 @@ public static class Level3BuilderKit
                 }
             }
         }
-        return ImportSprites(path, rects, pixelsPerUnit, pivot);
+        return rects;
     }
 
     // The same, with the rectangles given in pixels from the bottom-left, for a
@@ -613,13 +636,56 @@ public static class Level3BuilderKit
 
     static Sprite[] ImportSprites(string path, List<Rect> rects, float pixelsPerUnit, Vector2 pivot)
     {
+        string baseName = Path.GetFileNameWithoutExtension(path);
+        var cuts = new SpriteCut[rects.Count];
+        for (int i = 0; i < rects.Count; i++)
+        {
+            cuts[i] = new SpriteCut(baseName + "_" + i, rects[i], pivot);
+        }
+        return ImportSpriteCuts(path, cuts, pixelsPerUnit);
+    }
+
+    // One sprite cut from a sheet, as the Sprite Editor makes it: its name,
+    // its rectangle in pixels from the sheet's bottom-left corner, its pivot
+    // (0 to 1 across the rectangle), and its 9-slice border in pixels (left,
+    // bottom, right, top), zero for a sprite that isn't sliced.
+    public struct SpriteCut
+    {
+        public string name;
+        public Rect rect;
+        public Vector2 pivot;
+        public Vector4 border;
+
+        public SpriteCut(string name, Rect rect, Vector2 pivot)
+        {
+            this.name = name;
+            this.rect = rect;
+            this.pivot = pivot;
+            border = Vector4.zero;
+        }
+
+        public SpriteCut(string name, Rect rect, Vector2 pivot, Vector4 border)
+        {
+            this.name = name;
+            this.rect = rect;
+            this.pivot = pivot;
+            this.border = border;
+        }
+    }
+
+    // Imports a sheet as pixel art (as ImportSpriteSheet) and cuts it into
+    // these sprites, each with its own name, pivot and border: a grid's cells
+    // and a few larger props drawn on the same sheet, for example. Returns
+    // the sprites in the order of the cuts. It reimports only when something
+    // differs, and a sprite keeps its id while it keeps its name.
+    public static Sprite[] ImportSpriteCuts(string path, SpriteCut[] cuts, float pixelsPerUnit)
+    {
         var importer = (TextureImporter)AssetImporter.GetAtPath(path);
         if (importer == null)
         {
             Debug.LogError("Missing sprite sheet: " + path);
             return new Sprite[0];
         }
-        string baseName = Path.GetFileNameWithoutExtension(path);
 
         var factory = new SpriteDataProviderFactories();
         factory.Init();
@@ -633,11 +699,12 @@ public static class Level3BuilderKit
             && importer.filterMode == FilterMode.Point
             && importer.textureCompression == TextureImporterCompression.Uncompressed
             && !importer.mipmapEnabled
-            && existing.Length == rects.Count;
-        for (int i = 0; same && i < rects.Count; i++)
+            && existing.Length == cuts.Length;
+        for (int i = 0; same && i < cuts.Length; i++)
         {
-            same = existing[i].name == baseName + "_" + i && existing[i].rect == rects[i]
-                && existing[i].alignment == SpriteAlignment.Custom && existing[i].pivot == pivot;
+            same = existing[i].name == cuts[i].name && existing[i].rect == cuts[i].rect
+                && existing[i].alignment == SpriteAlignment.Custom && existing[i].pivot == cuts[i].pivot
+                && existing[i].border == cuts[i].border;
         }
 
         if (!same)
@@ -649,28 +716,28 @@ public static class Level3BuilderKit
             importer.textureCompression = TextureImporterCompression.Uncompressed;
             importer.mipmapEnabled = false;
 
-            var spriteRects = new SpriteRect[rects.Count];
+            var spriteRects = new SpriteRect[cuts.Length];
             var pairs = new List<SpriteNameFileIdPair>();
-            for (int i = 0; i < rects.Count; i++)
+            for (int i = 0; i < cuts.Length; i++)
             {
-                string name = baseName + "_" + i;
                 GUID id = GUID.Generate();
                 foreach (SpriteRect old in existing)
                 {
-                    if (old.name == name)
+                    if (old.name == cuts[i].name)
                     {
                         id = old.spriteID;      // the same sprite keeps its id, so nothing loses it
                     }
                 }
                 spriteRects[i] = new SpriteRect
                 {
-                    name = name,
-                    rect = rects[i],
+                    name = cuts[i].name,
+                    rect = cuts[i].rect,
                     alignment = SpriteAlignment.Custom,
-                    pivot = pivot,
+                    pivot = cuts[i].pivot,
+                    border = cuts[i].border,
                     spriteID = id,
                 };
-                pairs.Add(new SpriteNameFileIdPair(name, id));
+                pairs.Add(new SpriteNameFileIdPair(cuts[i].name, id));
             }
             provider.SetSpriteRects(spriteRects);
             provider.GetDataProvider<ISpriteNameFileIdDataProvider>().SetNameFileIdPairs(pairs);
@@ -678,16 +745,19 @@ public static class Level3BuilderKit
             importer.SaveAndReimport();
         }
 
-        var sprites = new Sprite[rects.Count];
+        var byName = new Dictionary<string, Sprite>();
         foreach (Object asset in AssetDatabase.LoadAllAssetRepresentationsAtPath(path))
         {
             var sprite = asset as Sprite;
-            int index;
-            if (sprite != null && sprite.name.StartsWith(baseName + "_")
-                && int.TryParse(sprite.name.Substring(baseName.Length + 1), out index) && index < sprites.Length)
+            if (sprite != null)
             {
-                sprites[index] = sprite;
+                byName[sprite.name] = sprite;
             }
+        }
+        var sprites = new Sprite[cuts.Length];
+        for (int i = 0; i < cuts.Length; i++)
+        {
+            byName.TryGetValue(cuts[i].name, out sprites[i]);
         }
         return sprites;
     }
@@ -707,6 +777,33 @@ public static class Level3BuilderKit
         }
         tile.sprite = sprite;
         tile.colliderType = colliderType;
+        EditorUtility.SetDirty(tile);
+        return tile;
+    }
+
+    // A Rule Tile with a single rule and no neighbours, so the rule matches
+    // every cell, and Output Random: each cell shows one of these sprites,
+    // picked by Perlin noise from the cell's position. Perlin noise is smooth,
+    // so its values gather around the middle: the sprites in the middle of the
+    // list come up most, and those at its ends least. Made once, then kept.
+    public static RuleTile MakeRandomRuleTile(string path, Sprite[] sprites, float perlinScale)
+    {
+        var tile = AssetDatabase.LoadAssetAtPath<RuleTile>(path);
+        if (tile == null)
+        {
+            tile = ScriptableObject.CreateInstance<RuleTile>();
+            AssetDatabase.CreateAsset(tile, path);
+        }
+        var rule = new RuleTile.TilingRule
+        {
+            m_Sprites = sprites,
+            m_Output = RuleTile.TilingRuleOutput.OutputSprite.Random,
+            m_PerlinScale = perlinScale,
+            m_ColliderType = Tile.ColliderType.None,
+        };
+        tile.m_DefaultSprite = sprites[sprites.Length / 2];
+        tile.m_DefaultColliderType = Tile.ColliderType.None;
+        tile.m_TilingRules = new List<RuleTile.TilingRule> { rule };
         EditorUtility.SetDirty(tile);
         return tile;
     }
@@ -839,6 +936,14 @@ public static class Level3BuilderKit
         {
             machine.RemoveState(child.state);
         }
+        foreach (ChildAnimatorStateMachine child in machine.stateMachines)
+        {
+            machine.RemoveStateMachine(child.stateMachine);
+        }
+        foreach (AnimatorTransition transition in machine.entryTransitions)
+        {
+            machine.RemoveEntryTransition(transition);
+        }
         while (controller.parameters.Length > 0)
         {
             controller.RemoveParameter(0);
@@ -853,12 +958,32 @@ public static class Level3BuilderKit
         return state;
     }
 
+    // A state inside a sub-state machine.
+    public static AnimatorState AddState(AnimatorStateMachine machine, string name, Motion motion, Vector2 position)
+    {
+        AnimatorState state = machine.AddState(name, new Vector3(position.x, position.y, 0f));
+        state.motion = motion;
+        return state;
+    }
+
     // A transition with the settings sprite animation wants: no blending
     // (Transition Duration 0), and Has Exit Time only when asked for, which
     // waits for the clip to end.
     public static AnimatorStateTransition AddTransition(AnimatorState from, AnimatorState to, bool hasExitTime)
     {
         AnimatorStateTransition transition = from.AddTransition(to);
+        transition.hasExitTime = hasExitTime;
+        transition.exitTime = 1f;
+        transition.hasFixedDuration = true;
+        transition.duration = 0f;
+        return transition;
+    }
+
+    // To the Exit node of the state's own machine, with the same settings: out
+    // of a sub-state machine, to whichever machine its transitions choose.
+    public static AnimatorStateTransition AddExitTransition(AnimatorState from, bool hasExitTime)
+    {
+        AnimatorStateTransition transition = from.AddExitTransition();
         transition.hasExitTime = hasExitTime;
         transition.exitTime = 1f;
         transition.hasFixedDuration = true;
