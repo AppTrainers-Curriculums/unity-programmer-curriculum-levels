@@ -1,0 +1,7 @@
+Free Fantasy Game GUI, by pzUH
+https://opengameart.org/content/free-fantasy-game-gui
+
+Licence: CC0 1.0 (public domain), as the OpenGameArt page states.
+https://creativecommons.org/publicdomain/zero/1.0/
+
+The pictures in Art/UI were cut from the pack's PNG sheets (Button.png, Windows.png).

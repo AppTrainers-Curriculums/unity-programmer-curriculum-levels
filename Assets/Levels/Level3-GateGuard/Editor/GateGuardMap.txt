@@ -1,0 +1,19 @@
+# Gate Guard's battlefield, read by GateGuardSceneBuilder. One mark per hex tile.
+# 13 tiles across, 9 down, pointy-top: odd lines sit half a tile to the right, so they
+# are drawn indented. The first line is the far edge (north), at the top of the screen.
+#
+#   S  the start: the road's dead end, where the skeletons rise
+#   =  road            G  the gate's tile: the road runs through the gate
+#   b  a build plot    .  grass (the builder adds a rock or a tree to some)
+#   T  trees           M  a mountain     H  hills     h  a small hill
+#   X  the ruins       C  the castle's ground
+#
+T T M M T T . T T . G C C
+ T = = = = = = = = = . C C
+T = . b . . b . . b . . T
+ T = . . b . . b . . . . T
+T . = = = = = = = = . . T
+ T . . b . . b . . = b . T
+T . b . . b . . b . = . T
+ X S = = = = = = = = . T T
+H h T . b . . b . . T T T

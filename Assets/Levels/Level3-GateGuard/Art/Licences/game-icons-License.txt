@@ -1,0 +1,13 @@
+Icons from game-icons.net, under CC BY 3.0: https://creativecommons.org/licenses/by/3.0/
+Each icon's author is credited, as game-icons.net asks:
+"Icons made by {author}. Available on https://game-icons.net"
+
+Bow.png            "Pocket bow"           by Lorc
+Catapult.png       "Trebuchet"            by Delapouite
+Frost.png          "Snowflake 1"          by Lorc
+Hearts.png         "Hearts"               by Skoll
+Skull.png          "Death skull"          by sbed
+CrossedSwords.png  "Crossed swords"       by Lorc
+Sell.png           "Receive money"        by Delapouite
+
+Turned from SVG (white on transparent) into 256 x 256 PNGs.

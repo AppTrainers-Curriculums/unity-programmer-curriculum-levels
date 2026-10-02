@@ -1,0 +1,13 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!221 &22100000
+AnimatorOverrideController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Bone Mage Override
+  m_Controller: {fileID: 9100000, guid: 9cb0f6b1b84634080aec6d16f3f6d736, type: 2}
+  m_Clips:
+  - m_OriginalClip: {fileID: 4043807988371827432, guid: 1712f2a3fc35f47eebd56c63f5049af2, type: 3}
+    m_OverrideClip: {fileID: -3183232228448455838, guid: 1712f2a3fc35f47eebd56c63f5049af2, type: 3}
