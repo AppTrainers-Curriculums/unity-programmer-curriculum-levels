@@ -256,8 +256,8 @@ design version 1 with all six recommendations (*"All 6 approved"*).
   builder's scene matches the one built in Moayad's Editor, and the play tests pass.
   Chapter 15's breaks were made in the lab as the book has students make them: three
   messages were exactly as quoted, and the empty field's was wrong (it's a
-  `NullReferenceException`, and the Start panel shows, with a **Play** button that does
-  nothing), now corrected. And making `Rig_Medium_General` Humanoid logs 56 red
+  `NullReferenceException`), now corrected. The builder left the Start panel switched
+  on, unlike Chapter 12: it switches it off now, so its scene matches the book's. And making `Rig_Medium_General` Humanoid logs 56 red
   `Assertion failed … IsFinite(curve.GetKey(0).value)` lines at every import, from two
   clips the game doesn't use: Chapter 3 now says so. The PDF was rebuilt (still 249
   pages).
@@ -328,7 +328,10 @@ design version 1 with all six recommendations (*"All 6 approved"*).
   kind of sprite in it has its own Order in Layer, which Unity compares before the sort
   axis); and Gate Guard's Universal renderer is in the URP asset's renderer list. Gate
   Guard's scene joins Build Settings on disk when the Editor next saves the project.
-  **Still to do:** Moayad's play-tests of the three games (keyboard, mouse and the Device
+  **Still to do:** run **Tools → Gate Guard (Level 3) → Build Scene** once more, and
+  commit the scene it makes: the builder now switches the Start panel off, as Chapter 12
+  does, and the committed scene still has it on (the game plays the same either way).
+  Then Moayad's play-tests of the three games (keyboard, mouse and the Device
   Simulator), and a Web build of Gate Guard on a phone with a late wave on the road.
 - **A fresh import of the project logs 56 red lines** for
   `Assets/Levels/Level3-GateGuard/Art/Animations/Rig_Medium_General.fbx`,
@@ -625,7 +628,10 @@ together outside the repo, into `book.md`: edit `book.md` from now on.
   compiles; the site builds with both new books published and encrypted. Found and fixed
   in Gate Guard's book: Chapter 3 warns about the 56 import lines from
   `Rig_Medium_General`, and Chapter 15's empty field has Unity's real message and
-  behaviour. Committed as three commits, not pushed.
+  behaviour. Committed as three commits, not pushed. Then the other session spotted that
+  the new Chapter 15 step described the builder's scene, where the Start panel was on,
+  not a student's, where Chapter 12 switches it off: the builder now switches it off too,
+  and the chapter describes the student's scene (a fourth commit).
 
 ---
 

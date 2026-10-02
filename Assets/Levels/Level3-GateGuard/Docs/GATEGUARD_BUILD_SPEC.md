@@ -607,9 +607,12 @@ play tests, which render nothing, set **Always Animate**.
   has students make them. The hash typo, the wrong call and the event with no receiver
   give exactly the messages and line numbers the book quotes. The empty **Gold Text**
   didn't: a `TMP_Text` field is a script's type, so it gives a `NullReferenceException`,
-  not an `UnassignedReferenceException`; and when `Awake` throws, Unity switches
-  `GateGame` off, so `OnEnable` never connects the **Play** button: the Start panel shows,
-  and **Play** does nothing. Chapter 15 now says so.
+  not an `UnassignedReferenceException`. When `Awake` throws, Unity switches `GateGame`
+  off, so `OnEnable` never connects the buttons; and since all four panels start switched
+  off (Chapter 12), no panel shows at all. Chapter 15 now says so.
+- **Found, and the builder changed:** the builder left the Start panel switched on,
+  unlike Chapter 12, which switches all four panels off. It switches the Start panel off
+  now; `Awake` shows it, so the game plays the same, and the play tests pass.
 
 ## 14. Out of scope
 
@@ -669,6 +672,7 @@ Animator layers (Level 5), flying enemies, and tower abilities beyond the three 
   health-bar frame, and a coin sound for the bounty.
 - **The kit is unchanged** (section 11).
 - **Checked again on 2 October** (section 13): Chapter 3 warns about the 56 import lines,
-  and Chapter 15's empty field has Unity's real message and behaviour.
+  Chapter 15's empty field has Unity's real message and behaviour, and the builder
+  switches the Start panel off, as Chapter 12 does.
 - **The lab's tests and screenshots** are in a copy of the project, not here, as Knight
   Run's and Crypt Keys' are.

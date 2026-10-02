@@ -415,6 +415,8 @@ public static class GateGuardSceneBuilder
         MakeLabel(loseWindow, "Lose Text", "The gate has fallen", 44f, new Vector2(0f, 40f), new Vector2(600f, 200f), Ink);
         Button tryAgainButton = MakeWideButton(loseWindow, "Try Again Button", "Try Again", new Vector2(0f, -230f), new Vector2(330f, 124f));
 
+        // All four start switched off, as the book has them (Chapter 12): Awake shows Start.
+        startPanel.SetActive(false);
         pausePanel.SetActive(false);
         winPanel.SetActive(false);
         losePanel.SetActive(false);

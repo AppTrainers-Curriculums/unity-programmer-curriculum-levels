@@ -9694,7 +9694,8 @@ wrong name. Some of these mistakes give a warning, and some give nothing at all
 
 1. Select `Gate Game`, and empty the bank's **Gold Text**: click it, and press **Delete**
    or **Backspace**. It says **None (TMP_Text)**.
-2. Play. The Start panel shows, as it always does, and a red error, once:
+2. Play. No Start panel, no **Play** button: the battlefield sits there, and nothing
+   happens. A red error, once:
 
    ```
    NullReferenceException: Object reference not set to an instance of an object
@@ -9705,15 +9706,14 @@ wrong name. Some of these mistakes give a warning, and some give nothing at all
 
    A plain `NullReferenceException`, not the friendlier message an empty `Transform`
    gets: `TMP_Text` is a script's type, not one of Unity's own (C# 10).
-3. Click **Play**. Nothing happens: not even another error.
-4. Read the stack trace from the bottom up: `GateGame.Awake` called `Bank.ResetBank`,
+3. Read the stack trace from the bottom up: `GateGame.Awake` called `Bank.ResetBank`,
    which called `Bank.UpdateText`, where line 55 is `goldText.text = Gold.ToString();`.
-   `goldText` is the only thing before a `.` that could be missing. Now look at `Gate
-   Game` in the Inspector: its `GateGame` has lost its tick. When `Awake` throws, Unity
-   switches the script off, so its `OnEnable`, which connects the **Play** button to
-   `Restart`, never runs, and nor does its `Update`. The Start panel was already showing
-   in the scene, so the game looks ready, and nobody can play. One empty field. Drag
-   `Gold Text` back.
+   `goldText` is the only thing before a `.` that could be missing. The error stopped
+   `Awake` before its last line, `EnterState(GameState.Start)`, so the Start panel never
+   opened. And look at `Gate Game` in the Inspector: its `GateGame` has lost its tick.
+   When `Awake` throws, Unity switches the script off, so its `OnEnable`, which connects
+   the buttons, never runs, and nor does its `Update`. One empty field, and nobody can
+   play. Drag `Gold Text` back.
 
 ### Do it — a state change that skips its enter step
 
