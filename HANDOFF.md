@@ -318,21 +318,19 @@ design version 1 with all six recommendations (*"All 6 approved"*).
 
 ## 4. The state right now (2 October 2026)
 
-- **Committed, not pushed yet:** on 2 October, three commits add Crypt Keys and Gate
-  Guard, each with its book, and put both books on the website (the site changes with
-  the next push). Before them, everything was pushed and deployed, Knight Run included.
+- **Committed, not pushed yet:** on 2 October, five commits add Crypt Keys and Gate
+  Guard, each with its book, put both books on the website (the site changes with the
+  next push), and fix Gate Guard's Start panel in the builder and the scene. Before them, everything was pushed and deployed, Knight Run included.
 - **Unity:** **Build Scene** has been run on this Mac for all three games (Knight Run on
-  1 October, Crypt Keys and Gate Guard on 2 October). So the project has the `Ground`,
+  1 October, Crypt Keys and Gate Guard on 2 October, Gate Guard again after the Start
+  panel fix), and its scenes are committed. So the project has the `Ground`,
   `Knight`, `Enemy`, `Hero` and `Plot` layers and the Enemy–Enemy collision setting; the
   2D Renderer's Transparency Sort Mode is Custom Axis (Knight Run looks the same: each
   kind of sprite in it has its own Order in Layer, which Unity compares before the sort
-  axis); and Gate Guard's Universal renderer is in the URP asset's renderer list. Gate
-  Guard's scene joins Build Settings on disk when the Editor next saves the project.
-  **Still to do:** run **Tools → Gate Guard (Level 3) → Build Scene** once more, and
-  commit the scene it makes: the builder now switches the Start panel off, as Chapter 12
-  does, and the committed scene still has it on (the game plays the same either way).
-  Then Moayad's play-tests of the three games (keyboard, mouse and the Device
-  Simulator), and a Web build of Gate Guard on a phone with a late wave on the road.
+  axis); and Gate Guard's Universal renderer is in the URP asset's renderer list. Build
+  Settings lists Gate Guard's scene first. **Still to do:** Moayad's play-tests of the
+  three games (keyboard, mouse and the Device Simulator), and a Web build of Gate Guard
+  on a phone with a late wave on the road.
 - **A fresh import of the project logs 56 red lines** for
   `Assets/Levels/Level3-GateGuard/Art/Animations/Rig_Medium_General.fbx`,
   `Assertion failed on expression: 'IsFinite(curve.GetKey(0).value)'`, and so does every
@@ -631,7 +629,8 @@ together outside the repo, into `book.md`: edit `book.md` from now on.
   behaviour. Committed as three commits, not pushed. Then the other session spotted that
   the new Chapter 15 step described the builder's scene, where the Start panel was on,
   not a student's, where Chapter 12 switches it off: the builder now switches it off too,
-  and the chapter describes the student's scene (a fourth commit).
+  and the chapter describes the student's scene (a fourth commit). You ran Gate Guard's
+  **Build Scene** again, and its scene was committed (a fifth).
 
 ---
 
