@@ -122,6 +122,8 @@ an environment variable **`COURSE_PW_<SLUG>`** (slug uppercased, `-` → `_`):
 | `level-2-space-shooter` | `COURSE_PW_LEVEL_2_SPACE_SHOOTER` |
 | `level-2-tank-arena`    | `COURSE_PW_LEVEL_2_TANK_ARENA`    |
 | `level-3-knight-run`    | `COURSE_PW_LEVEL_3_KNIGHT_RUN`    |
+| `level-3-crypt-keys`    | `COURSE_PW_LEVEL_3_CRYPT_KEYS`    |
+| `level-3-gate-guard`    | `COURSE_PW_LEVEL_3_GATE_GUARD`    |
 
 Level 2 has three books, one per game (Mini Golf, Space Shooter, Tank Arena),
 each its own entry in `levels.config.mjs` with its own secret. The three can
@@ -130,9 +132,11 @@ assembled from each game's `book.md` and the shared C# Concept chapters (see
 `Assets/Levels/Level2-Shared/README.md`): re-assemble and commit them after
 editing a shared chapter, or the site keeps the old text.
 
-Level 3 works the same way, from `Assets/Levels/Level3-Shared`. Its first book,
-Knight Run, is published, locked with `COURSE_PW_LEVEL_3_KNIGHT_RUN`. Add each
-new Level 3 book's secret before setting its `published: true`.
+Level 3 works the same way, from `Assets/Levels/Level3-Shared`. Its three books,
+Knight Run, Crypt Keys and Gate Guard, are published, each locked with its own
+secret: `COURSE_PW_LEVEL_3_KNIGHT_RUN`, `COURSE_PW_LEVEL_3_CRYPT_KEYS` and
+`COURSE_PW_LEVEL_3_GATE_GUARD`. Add a new book's secret before setting its
+`published: true`.
 
 - **In CI:** add each as a GitHub **repository secret**
   (Settings → Secrets and variables → Actions → New repository secret). The

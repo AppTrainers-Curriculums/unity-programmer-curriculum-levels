@@ -81,4 +81,4 @@ The book shows each script many times, as it grows from chapter to chapter (`Ene
 
 ## The website
 
-`workbook.md` is also the source of the Gate Guard pages on the course site, entry `level-3-gate-guard` in `web/levels.config.mjs`, locked with the `COURSE_PW_LEVEL_3_GATE_GUARD` repository secret (see `web/README.md`). It's `published: false` until that secret is added; then set it to `true`, and push.
+`workbook.md` is also the source of the Gate Guard pages on the course site, entry `level-3-gate-guard` in `web/levels.config.mjs`. They are published, and locked with the `COURSE_PW_LEVEL_3_GATE_GUARD` repository secret (see `web/README.md`): push a re-assembled `workbook.md` and the site follows.

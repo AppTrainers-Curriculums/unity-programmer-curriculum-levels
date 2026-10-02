@@ -77,4 +77,4 @@ The book shows each script many times, as it grows from chapter to chapter, and 
 
 ## The website
 
-`workbook.md` is also the source of the Crypt Keys pages on the course site, entry `level-3-crypt-keys` in `web/levels.config.mjs`, locked with the `COURSE_PW_LEVEL_3_CRYPT_KEYS` repository secret (see `web/README.md`). It's `published: false` until that secret is added; then set it to `true`, and push.
+`workbook.md` is also the source of the Crypt Keys pages on the course site, entry `level-3-crypt-keys` in `web/levels.config.mjs`. They are published, and locked with the `COURSE_PW_LEVEL_3_CRYPT_KEYS` repository secret (see `web/README.md`): push a re-assembled `workbook.md` and the site follows.

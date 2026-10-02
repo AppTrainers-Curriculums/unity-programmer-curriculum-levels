@@ -21,7 +21,7 @@ All game names are working titles.
 | 0 Zero | — | Rocket Launch | Built |
 | 1 Beginner | — | Catch the Falling Blocks | Built |
 | 2 Builder | — | Mini Golf (3D), Space Shooter (2D), Tank Arena (2D, top-down) | Built |
-| 3 Junior-ready | Unity Certified User: Programmer | **Knight Run** (2D platformer, core), **Crypt Keys** (2D dungeon crawler), **Gate Guard** (3D tower defence) | **Agreed, next** |
+| 3 Junior-ready | Unity Certified User: Programmer | **Knight Run** (2D platformer, core), **Crypt Keys** (2D dungeon crawler), **Gate Guard** (3D tower defence) | **In progress:** Knight Run, Crypt Keys and Gate Guard built; the entry test next |
 | 4 Junior | Unity Certified Associate: Programmer | **Arcane Duel** (card battler, core), **Pocket Karts** (3D kart racer), **Juice Tycoon** (idle tycoon) | Planned |
 | 5 Mid-level I | — | **Lost Ruins** (3D action adventure, core), **Box Pusher** (2D puzzle with undo), **Tiny Colony** (RTS-lite, optional) | Planned |
 | 6 Mid-level II | — | **Card Table** (online card game for mobile, core), **Arena Online** (real-time multiplayer, optional) | Planned |
@@ -79,8 +79,11 @@ which is what the Associate exam assumes.
 trainer can teach any one game. The games differ; the topics don't. **Level 5 is the
 exception:** only its core game, Lost Ruins, teaches all of it (see Level 5).
 
-**Art and sound:** CC0 packs, such as Kenney's, where a pack fits; Knight Run uses the
-Brackeys Platformer Bundle. **Ask Moayad before any download.** If a pack has no
+**Art and sound:** free CC0 packs, and no Kenney assets from Level 3 on. Moayad's sheet,
+`Design_Resources_Levels_3-6.xlsx`, lists the packs for every game, with their licences;
+each game's spec records what was picked after opening them. Knight Run uses the Brackeys
+Platformer Bundle, Crypt Keys Foozle's Lucifer set, and Gate Guard KayKit's medieval
+packs. **Ask Moayad before any download.** If a pack has no
 animation frames, animate properties instead (position, rotation, scale, colour): that
 teaches the Animation window just as well.
 
@@ -200,76 +203,110 @@ on 1 October 2026; `Level3-KnightRun/Docs/KNIGHTRUN_BUILD_SPEC.md` has every det
 ### Crypt Keys — 2D top-down dungeon crawler
 
 **Pitch:** a hero explores a crypt of six rooms. Keys open doors, chests give loot, and
-skeletons and archers guard the way to a boss room.
+skeletons and archers guard the way to the Skeleton King's tomb. The design was approved
+on 1 October 2026 and the game is built; `Level3-CryptKeys/Docs/CRYPTKEYS_BUILD_SPEC.md`
+has every detail.
 
 - **Controls:**
-  - keyboard: W A S D or the arrows to move, Space or a click to attack, E to open, Q to
-    drink a potion;
-  - touch: press and hold to walk towards the finger (as in Tank Arena), and tap to
-    attack.
+  - keyboard: W A S D or the arrows to move, Space or J to attack, E to open the chest in
+    front, Q to drink a potion;
+  - mouse or touch: press and hold to walk towards the pointer (as in Tank Arena), and
+    tap to attack, or to open the chest in front.
 - **Animator (the hero):**
   - `Direction` (int, 0–3) through `SetInteger`, for down, left, up and right;
-  - `Speed` (float), and `Attack` and `Hurt` triggers;
-  - one sub-state machine per direction. Blend trees wait until Level 5.
-- **Animation Events:** the sword's hit frame; a chest's Opening clip, which spawns its
-  loot at the right frame; and a door's Opening clip, which turns off its collider.
+  - `Speed` (float), and the `Attack`, `Hurt` and `Dead` triggers;
+  - one sub-state machine per direction: Down is built state by state, then copied three
+    times. Blend trees wait until Level 5.
+- **Animation Events:** the sword's hit frame and the bow's release frame; a chest's
+  Opening clip, which spawns its loot at the right frame; a door's Opening clip, which
+  turns off its collider; the king's summon; and the end of every Dead clip.
 - **Enemies as state machines:**
-  - **Skeleton:** Idle → Patrol → Chase → Attack → Hurt → Dead;
-  - **Archer:** Idle → Keep Distance → Shoot → Reposition;
-  - **Boss:** Phase 1, then Phase 2 below half health.
-- **Rooms:** all in one scene. The camera slides from room to room. Doors are Closed →
-  Opening → Open, through an `Open` bool (`SetBool`), which gives the book its Bool
-  parameter; keys are counted.
+  - **Skeleton:** Idle → Patrol → Chase → Attack, plus Hurt and Dead;
+  - **Archer:** Idle → Keep Distance → Shoot → Reposition, plus Hurt and Dead;
+  - **Skeleton King:** Asleep → Walk → Swing → Rest; below half health, Summon (two
+    skeletons) and Whirlwind, which turns the sword aside; then Dead.
+  - The skeleton and the archer use the hero's controller through Override Controllers;
+    the king, a copy of it, extended with two states.
+- **Rooms:** all in one scene, stacked one above the other, each painted on Tilemaps with
+  a Random Rule Tile for the floor. The camera slides from room to room. Doors are
+  Closed → Opening → Open, through an `Open` bool (`SetBool`), which gives the book its
+  Bool parameter; keys are counted.
 - **UI:**
-  - hearts and a key count;
+  - hearts, in half hearts, and the key and gold counts;
   - a small inventory of potions;
   - the room name, which fades in;
   - a boss health bar;
-  - a pause menu.
-- **Art:** a top-down dungeon pack, with Moayad's OK to download. If it has no walk frames
-  for each direction, each direction's clip keyframes that direction's sprite plus a walk
-  bob.
-- **Suggested scripts:** `Hero`, `HeroCombat`, `Skeleton`, `Archer`, `Arrow`, `Boss`,
-  `Door`, `Key`, `Chest`, `Potion`, `RoomCamera`, `CryptGame`, `HeartsBar`, `Inventory`
-  and `PauseMenu`.
+  - a pause menu, and start, win and lose panels.
+- **Art:** Foozle's **Lucifer** set (CC0): the Warrior hero, the Skeleton Grunt, the
+  Skeleton Hunter (the archer) and the Skeleton King boss, every one in 4 directions with
+  the same animations, so they share one Animator Controller; the Dungeon Tileset, the
+  Pickups and the RPG UI. Chests, hearts and the arrow from 0x72's DungeonTileset II, keys
+  from Foozle's Legend UI Icons, sounds and music from Ninja Adventure. Every pack is in
+  `Level3-CryptKeys/CREDITS.md`.
+- **Scripts:** `Hero`, `HeroCombat`, `HeroHealth`, `Inventory`, `Skeleton`, `Archer`,
+  `Arrow`, `SkeletonKing`, `Door`, `Chest`, `Pickup`, `HeartsBar`, `BossBar`,
+  `RoomCamera`, `CryptGame`, `PauseMenu`, `Facing` and `Room`.
 - **Objectives covered:** the same as Knight Run, with `SetInteger` and sub-state machines
   in the foreground.
 
 ### Gate Guard — 3D tower defence
 
-**Pitch:** enemies march along a winding road towards the castle gate. The player places
-towers on build spots and upgrades them, to stop ten waves.
+**Pitch:** skeletons rise from the ruins and march along a winding road to the castle
+gate. The player builds towers on dirt plots beside the road and upgrades them, to hold
+the gate for ten waves. The design was approved on 1 October 2026 and the game is built;
+`Level3-GateGuard/Docs/GATEGUARD_BUILD_SPEC.md` has every detail, and its section 16 what
+changed from this plan.
 
 - **Controls:**
-  - mouse or touch: tap a build spot to open the build menu, and tap a tower to upgrade
-    or sell it;
-  - buttons: Start Wave, ×2 speed (`Time.timeScale`) and Pause.
-- **Enemies:**
+  - mouse or touch: tap a dirt plot to open the build menu over it, and tap a tower to
+    upgrade or sell it, with its range shown as a ring;
+  - buttons: Start Wave, ×2 speed (`Time.timeScale`) and Pause; Space, F, Esc and P on
+    a keyboard.
+- **Enemies:** four kinds of skeleton, one `Enemy` script with their own numbers in the
+  Inspector: the Minion, the Rogue (fast), the Warrior (tough) and the Bone Mage (the boss
+  of wave 10).
   - they follow waypoints (an array of Transforms);
-  - their state machine is Walk → Slowed → Dead;
-  - their Animator has a walk bob, a hit flash and a death clip. `SetFloat("WalkSpeed")`
-    sets how fast the walk bob plays, so a Frost hit visibly slows it. An Animation Event
-    at the end of the death clip pays the reward and removes the enemy.
+  - their state machine is Rising → Walking ⇄ Slowed → At Gate or Dying;
+  - their Animator, one `Skeleton` controller for all four through Override Controllers:
+    a rise out of the ground, the walk (its Speed Multiplier is `WalkSpeed`, so frost
+    visibly slows it), a chop at the gate, a fall and a cheer. Animation Events, added in
+    the Import Settings: the rise's end starts the walk, the chop costs the gate its
+    lives, the fall's end pays the bounty and removes the skeleton.
+  - a hit is a red flash in code: one Animator layer at Level 3 can't play a flinch
+    without stopping the walk.
 - **Towers:**
   - their state machine is Idle → Aim → Fire → Reload;
-  - the Animator holds an aiming pose while the `Aiming` bool is on, plays a recoil clip
-    on the `Fire` trigger, and `SetInteger("Level")` switches between upgrade looks;
-  - the types are Arrow, Cannon (with splash damage) and Frost (it slows enemies).
+  - one `Crew` controller drives all three crews (an archer, a mage and a wooden catapult
+    arm made of property clips): it holds the aim while `Aiming` is on, and shoots on the
+    `Fire` trigger; the shot leaves on the clip's release frame;
+  - a second Animator on the tower: `SetInteger("Level")` switches its looks, a second
+    storey and then flags, with Is Active keys;
+  - the types are Arrow, **Catapult** (splash damage; the free packs have no cannon) and
+    Frost (it slows skeletons). One `Tower` script; `Projectile` has the kind's `switch`.
 - **Waves:**
-  - an array of `[System.Serializable]` wave entries (which enemy, how many, the gap
-    between them);
-  - the spawner is a state machine: Waiting → Spawning → In Progress → Cleared.
+  - an array of `[System.Serializable]` `Wave`s, each an array of groups (which skeleton,
+    how many, the gap between them);
+  - the spawner is a state machine: Waiting → Spawning → In Progress → Cleared, with a
+    countdown and a bonus.
 - **UI:**
-  - money, lives and "Wave N / 10";
-  - build and upgrade menus placed over the tile tapped;
-  - world-space health bars over the enemies;
-  - victory, defeat and pause panels.
-- **Art:** for example Kenney's Tower Defense Kit (3D), with Moayad's OK to download.
-- **Suggested scripts:** `Enemy`, `WaypointPath`, `WaveSpawner`, `Tower`, `Projectile`,
-  `BuildSpot`, `BuildMenu`, `TowerMenu`, `Bank` (money and lives), `GateGame`,
-  `EnemyHealthBar` and `SpeedControls`.
-- **Objectives covered:** the same as Knight Run, with towers, waves and world-space UI in
-  the foreground. It is 3D, as Mini Golf was at Level 2.
+  - gold, lives and "Wave N / 10";
+  - build and tower menus placed over the tile tapped;
+  - world-space health bars over the skeletons;
+  - start, pause, victory and defeat panels.
+- **Art:** KayKit's CC0 packs, in one style: Medieval Hexagon (the battlefield, the road,
+  the plots, the castle, the gate and the towers), Skeletons, Adventurers (the Ranger and
+  the Mage) and Character Animations (every clip). Not the Medieval Builder Pack: KayKit
+  calls it legacy, and the Hexagon pack has everything it had. Tower upgrade looks built
+  from KayKit parts. Menus from pzUH's Free Fantasy Game GUI; seven icons from
+  game-icons.net, credited; the font Lilita One; sounds and music from Ninja Adventure.
+  Every pack is in `Level3-GateGuard/CREDITS.md`.
+- **Scripts:** `GateGame`, `Bank`, `WaveSpawner`, `Wave`, `SpawnGroup`, `WaypointPath`,
+  `Enemy`, `EnemyHealthBar`, `Tower`, `TowerLevel`, `TowerCrew`, `Projectile`,
+  `BuildPlot`, `Picker`, `BuildMenu`, `TowerMenu`, `RangeRing`, `Gate` and `PauseMenu`.
+  (`SpeedControls` wasn't needed: `GateGame` keeps the speed.)
+- **Objectives covered:** the same as Knight Run, with Humanoid Avatars, events in the
+  Import Settings, towers, waves and world-space UI in the foreground. It is 3D, as Mini
+  Golf was at Level 2.
 
 ### Level 3 entry test (it tests Level 2)
 
@@ -316,7 +353,7 @@ objectives naturally), Pocket Karts and Juice Tycoon.
 | Game | What it is | What it carries |
 | --- | --- | --- |
 | **Arcane Duel** _(core)_ | 2D card battler against the computer, mostly UI | Cards through inheritance (an abstract `Card`, then attack, heal and shield cards) and interfaces (`IDamageable`). ScriptableObject card data. The draw pile as a `Queue` and the discard pile as a `Stack`. C# events for turns. A hand laid out with layout groups. Menu, deck builder, battle and results scenes. Decks saved as JSON, settings in `PlayerPrefs` |
-| **Pocket Karts** | 3D kart racer | Menu, track select, race and results scenes, with data passed between them. An Input Actions asset for keyboard, gamepad and touch, with rebinding saved in `PlayerPrefs`. Kart prefab variants (fast, heavy, balanced). AI karts on waypoints, through inheritance and an `IRacer` interface. Lap times and best laps saved as JSON. A Profiler and Frame Debugger session, and importing a package and fixing a conflict. Art: for example Kenney's Racing Kit |
+| **Pocket Karts** | 3D kart racer | Menu, track select, race and results scenes, with data passed between them. An Input Actions asset for keyboard, gamepad and touch, with rebinding saved in `PlayerPrefs`. Kart prefab variants (fast, heavy, balanced). AI karts on waypoints, through inheritance and an `IRacer` interface. Lap times and best laps saved as JSON. A Profiler and Frame Debugger session, and importing a package and fixing a conflict. Art: from the design resources sheet |
 | **Juice Tycoon** | 2D idle tycoon, mobile style | ScriptableObject generators and upgrades. Earnings while the player is away (a saved timestamp and JSON). Number formatting (1.2K, 3.4M). Scrolling lists with anchors and layout groups. Prefab variants for the generator rows. Pooled "+$" pop-ups. Finding garbage-collection spikes with the Profiler |
 
 ---
@@ -382,4 +419,4 @@ Level 5 instead. Every class does Lost Ruins.
 - Levels 4–6: keep, swap or drop any game before work on its level starts.
 - Level 5's Tiny Colony and Level 6's Arena Online are optional: build them only if
   there's time.
-- Art packs: approve each Kenney download before it happens.
+- Art packs: approve each download before it happens.

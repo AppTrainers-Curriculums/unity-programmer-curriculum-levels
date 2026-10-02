@@ -24,7 +24,7 @@ Level N's exit test is Level N+1's entry test.
 | 0 | Zero | Rocket Launch | Done |
 | 1 | Beginner | Catch the Falling Blocks | Done, with its entry test |
 | 2 | Builder | Mini Golf (3D), Space Shooter (2D), Tank Arena (2D) | Done, with its entry test |
-| 3 | Junior-ready | **Knight Run** (core), then Crypt Keys and Gate Guard | **In progress:** Knight Run is built; Crypt Keys, Gate Guard and the entry test are next. Ends at **Unity Certified User: Programmer** |
+| 3 | Junior-ready | **Knight Run** (core), then Crypt Keys and Gate Guard | **In progress:** Knight Run, Crypt Keys and Gate Guard are built; the entry test is next. Ends at **Unity Certified User: Programmer** |
 | 4 | Junior | Planned: **Arcane Duel** (core), Pocket Karts, Juice Tycoon | Ends at **Unity Certified Associate: Programmer** |
 | 5 | Mid-level I | Planned: **Lost Ruins** (core), Box Pusher, Tiny Colony (optional) | |
 | 6 | Mid-level II | Planned: **Card Table** (core), Arena Online (optional) | |
@@ -178,6 +178,94 @@ book).
 - **On the website**, locked with `COURSE_PW_LEVEL_3_KNIGHT_RUN`.
 - **Not done yet:** Moayad's own play-test in Unity.
 
+### Level 3: Crypt Keys
+
+A warrior explores a crypt of six rooms, stacked one above the other, each painted on
+Tilemaps with a floor that never repeats (a Random Rule Tile). Keys from chests open the
+doors in the rooms' top walls; skeletons patrol, chase and swing; skeleton archers keep
+their distance and shoot from behind cover; the Skeleton King fights in two phases (a
+double swing; then a summon of two skeletons and a whirlwind that turns the sword aside).
+Three hearts in half hearts, potions, gold, a boss bar, a room camera, torchlight with 2D
+lights, the pause menu, win and lose screens, Restart in code, sound and music, and
+keyboard, mouse and touch control. The art is Foozle's **Lucifer** packs, Legend's keys
+and 0x72's chests and hearts; the sound is **Ninja Adventure** (all CC0, `CREDITS.md`).
+Moayad approved design version 1 with all six recommendations (*"i think all is good, go
+a head"*).
+
+- **C# and Unity, new in this book:** an Animator with four sub-state machines joined
+  through Exit and Entry, built once and copied; one controller for four characters
+  through Override Controllers, and a copied, extended one for the boss; pivots and
+  colliders at the feet, Transparency Sort Axis sorting and a Sorting Group; the Pixel
+  Perfect Camera; the Rule Tile; sprites cut by hand in the Sprite Editor; 2D lights and a
+  flicker clip on a Light 2D; `Physics2D.OverlapCircleAll` and `Linecast` with layer
+  masks; `Instantiate` of a scene object; hearts from `/` and `%`. The same 12 shared C#
+  Concept chapters and Check Yourself as Knight Run.
+- **The book** (286 pages) shows each script as it grows, 53 versions in all, every one
+  compiling at its step (`check-code.mjs`), and its 18 final cards match `Scripts/`.
+- **Checked in a copy of the project:** the scene builds with no errors or warnings, and
+  14 play tests pass (walking through the sub-state machines, the sword's hit frame,
+  skeletons, archers and arrows, keys, doors, chests, potions, the king's two phases and
+  the win, the lose panel, Restart, pausing, and the whole crypt in order), with two more
+  passes that take pictures. The lights, the rooms and the UI were looked at in Play-mode
+  pictures. The Unity messages Chapter 15
+  quotes were copied from Unity 6000.6's Console. Knight Run's builder still builds its
+  scene with the extended builder kit, and its 15 play tests pass.
+- **On the website:** entry `level-3-crypt-keys`, published, locked with
+  `COURSE_PW_LEVEL_3_CRYPT_KEYS` (Moayad added the secret on 2 October).
+- **Not done yet:** Moayad's own play-test in Unity. He ran **Build Scene** on 2 October.
+
+### Level 3: Gate Guard
+
+A 3D tower defence on a battlefield of KayKit hex tiles, seen from a camera that never
+moves. Ten waves of skeletons (the Minion, the Rogue, the Warrior and, in wave 10, the
+Bone Mage) rise out of the ruins and march along a winding road to the castle gate; the
+player builds Arrow, Catapult and Frost towers on 13 dirt plots, upgrades them twice (a
+second storey, then flags), and sells them for 60%. Ten lives, gold and bounties, wave
+bonuses and a countdown, world-space health bars, a build menu that opens over the tapped
+plot, double speed, the pause menu, win and lose screens (the gate's doors burst open and
+the skeletons cheer), Restart in code, sound and music, soft shadows, and a camera that
+shows the whole battlefield on any screen; played with a pointer. The models and clips
+are **KayKit**'s (Medieval Hexagon, Skeletons, Adventurers, Character Animations), the
+GUI **pzUH**'s, the icons **game-icons.net**'s (CC BY 3.0, credited on the Start panel),
+the font **Lilita One**, the sound **Ninja Adventure** (`CREDITS.md`). Moayad approved
+design version 1 with all six recommendations (*"All 6 approved"*).
+
+- **C# and Unity, new in this book:** model import settings; **Humanoid Avatars** and
+  clips from other files; a clip's Loop Time, root motion baked into the pose, and
+  **Animation Events added in the Import Settings**; a state's **Speed Multiplier** from a
+  parameter; one controller for four skeletons and one for three tower crews (an archer,
+  a mage and a wooden catapult arm made of property clips), through Override Controllers;
+  an **Int** that switches a tower's looks with **Is Active** keys; a **hex Grid** painted
+  with the **GameObject Brush**; weapons on hand bones; `Physics.OverlapSphere`, a ray from
+  the camera, `Camera.WorldToScreenPoint`; a **World Space Canvas**; a Trail Renderer, a
+  Line Renderer and Particle Systems; a Physical Camera with Gate Fit. The same 12 shared
+  C# Concept chapters and Check Yourself.
+- **The book** (249 pages) shows each script as it grows, 44 versions in all, every one
+  compiling at its step (`check-code.mjs`), and its 19 final cards match `Scripts/`.
+- **Checked in a copy of the project (the lab):** the scene builds with no errors or
+  warnings, and 11 play tests pass (building, upgrading and selling each tower; first in
+  line, the release frame and the bounty; a stone's splash; frost's slow, in the code and
+  in the walk clip; the gate's lives, its break, the cheer and the defeat; the waves,
+  their bonus and the countdown; the boss and the win; pause and ×2; Restart), with two
+  more passes that take pictures. Six design checks ran before building (section 13 of
+  the spec). The panels, the HUD and the cover
+  were looked at in Play-mode pictures, which found four layout faults, fixed; writing the
+  book found the stone's landing sound almost silent (a 3D sound far from the listener),
+  fixed.
+- **Checked again on 2 October**, with all three Level 3 games in one project: the
+  builder's scene matches the one built in Moayad's Editor, and the play tests pass.
+  Chapter 15's breaks were made in the lab as the book has students make them: three
+  messages were exactly as quoted, and the empty field's was wrong (it's a
+  `NullReferenceException`, and the Start panel shows, with a **Play** button that does
+  nothing), now corrected. And making `Rig_Medium_General` Humanoid logs 56 red
+  `Assertion failed … IsFinite(curve.GetKey(0).value)` lines at every import, from two
+  clips the game doesn't use: Chapter 3 now says so. The PDF was rebuilt (still 249
+  pages).
+- **On the website:** entry `level-3-gate-guard`, published, locked with
+  `COURSE_PW_LEVEL_3_GATE_GUARD` (Moayad added the secret on 2 October).
+- **Not done yet:** Moayad's own play-test in Unity (he ran **Build Scene** on 2 October),
+  and a Web build on a phone with a late wave.
+
 ### Entry tests (Levels 1 and 2)
 
 - Print each paper as **two sets**: Sections 1–2 (the cover and pages 1–7) and Section 3
@@ -210,10 +298,12 @@ book).
 ### Website
 
 - Live at <https://apptrainers-curriculums.github.io/unity-programmer-curriculum-levels/>.
-- Levels 0 and 1, all three Level 2 books and Level 3's Knight Run are **published and
-  password-protected**. Each has its own secret: `COURSE_PW_LEVEL_0`,
+- Levels 0 and 1, all three Level 2 books and all three Level 3 books are **published
+  and password-protected**. Each has its own secret: `COURSE_PW_LEVEL_0`,
   `COURSE_PW_LEVEL_1`, `COURSE_PW_LEVEL_2_MINI_GOLF`, `COURSE_PW_LEVEL_2_SPACE_SHOOTER`,
-  `COURSE_PW_LEVEL_2_TANK_ARENA` and `COURSE_PW_LEVEL_3_KNIGHT_RUN`.
+  `COURSE_PW_LEVEL_2_TANK_ARENA`, `COURSE_PW_LEVEL_3_KNIGHT_RUN`,
+  `COURSE_PW_LEVEL_3_CRYPT_KEYS` and `COURSE_PW_LEVEL_3_GATE_GUARD`. Crypt Keys and Gate
+  Guard go live with the next push.
 - Each level also has an unlisted "All the Code" page at `/code/<slug>/`.
 
 ### Project clean-up
@@ -226,14 +316,35 @@ book).
 
 ---
 
-## 4. The state right now (1 October 2026)
+## 4. The state right now (2 October 2026)
 
-- **Everything is committed and pushed**, and the website is deployed, Knight Run
-  included. The latest commits add Level 3's first game, Knight Run, with its book, and
-  put the book on the website.
-- **Unity:** Knight Run's **Build Scene** has been run on this Mac, so the project has
-  the `Ground`, `Knight` and `Enemy` layers and the Enemy–Enemy collision setting.
-  **Still to do:** Moayad's play-test, with the keyboard and the Device Simulator.
+- **Committed, not pushed yet:** on 2 October, three commits add Crypt Keys and Gate
+  Guard, each with its book, and put both books on the website (the site changes with
+  the next push). Before them, everything was pushed and deployed, Knight Run included.
+- **Unity:** **Build Scene** has been run on this Mac for all three games (Knight Run on
+  1 October, Crypt Keys and Gate Guard on 2 October). So the project has the `Ground`,
+  `Knight`, `Enemy`, `Hero` and `Plot` layers and the Enemy–Enemy collision setting; the
+  2D Renderer's Transparency Sort Mode is Custom Axis (Knight Run looks the same: each
+  kind of sprite in it has its own Order in Layer, which Unity compares before the sort
+  axis); and Gate Guard's Universal renderer is in the URP asset's renderer list. Gate
+  Guard's scene joins Build Settings on disk when the Editor next saves the project.
+  **Still to do:** Moayad's play-tests of the three games (keyboard, mouse and the Device
+  Simulator), and a Web build of Gate Guard on a phone with a late wave on the road.
+- **A fresh import of the project logs 56 red lines** for
+  `Assets/Levels/Level3-GateGuard/Art/Animations/Rig_Medium_General.fbx`,
+  `Assertion failed on expression: 'IsFinite(curve.GetKey(0).value)'`, and so does every
+  reimport of that file: KayKit's two `Spawn` clips in it start with every bone at scale
+  0, which a Humanoid can't take. The game doesn't use them; clear the lines. Gate
+  Guard's spec (section 13) has the details.
+- **The design pages** show each game's design version 1: Crypt Keys
+  https://claude.ai/artifact/3nJ1vA36MxgW94FHq5kRJt, Gate Guard
+  https://claude.ai/artifact/VTypoXoXvcjMypwJ2BgsfC. Each game's spec is the source of
+  truth now. Gate Guard was made in a Remote Control session, from Moayad's phone: its
+  packs were downloaded to that session's scratch folder, and only the files the game
+  uses were copied in.
+- `Assets/Levels/Level3-KnightRun/Art/Fonts/PixelOperator8 SDF.asset` shows as changed,
+  and isn't committed: it's a dynamic font atlas, which grows whenever the Editor draws a
+  letter it hasn't drawn before.
 - From earlier, still open: restart Unity after the SampleScene deletion, build the Tank
   Arena scene on this Mac, and retest the Mini Golf fixes (section 7).
 
@@ -282,6 +393,8 @@ node build.mjs workbook.md ../../Docs/Level0-RocketLaunch-Workbook.pdf
 cd Assets/Levels/Level3-Shared/Docs~/pdf
 npm install
 node build.mjs ../../../Level3-KnightRun/Docs~/workbook/workbook.md ../../../Level3-KnightRun/Docs/Level3-KnightRun-Workbook.pdf
+node build.mjs ../../../Level3-CryptKeys/Docs~/workbook/workbook.md ../../../Level3-CryptKeys/Docs/Level3-CryptKeys-Workbook.pdf
+node build.mjs ../../../Level3-GateGuard/Docs~/workbook/workbook.md ../../../Level3-GateGuard/Docs/Level3-GateGuard-Workbook.pdf
 ```
 
 What the builder prints:
@@ -411,9 +524,9 @@ together outside the repo, into `book.md`: edit `book.md` from now on.
    Golf, Space Shooter and Tank Arena and their topics. Do it in both the PDF and the
    claude.ai project doc.
 3. **Level 3, Junior-ready.** It ends at the Certified User: Programmer exam. **Knight
-   Run is built and on the website** (section 3): next, Moayad's play-test. Then, one at
-   a time, each with its design shown to Moayad **before** building: the Level 3 entry
-   test, Crypt Keys and Gate Guard.
+   Run, Crypt Keys and Gate Guard are built, committed, and their books published**
+   (section 3; the last two go live with the next push): next, Moayad's play-tests. Then
+   the Level 3 entry test, with its design shown to Moayad **before** it's written.
    - **Topics, from the Level Reference:**
      - state machines with `enum` + `switch`;
      - the Animator Controller: states, transitions, parameters, and `SetTrigger`,
@@ -489,6 +602,30 @@ together outside the repo, into `book.md`: edit `book.md` from now on.
   and *"3 step by step"* (paint every section in the book). Knight Run was built: the
   game, the scene builder, the 12 C# Concept chapters, Check Yourself, the book and its
   PDF, the code checker and the READMEs.
+- **Crypt Keys (1 October):** you shared the design resources sheet, asked for the next
+  two games' designs (*"do the best to make this curriculum good for teatching and make
+  studtent very pro with unity"*), and approved Crypt Keys' design with *"i think all is
+  good, go a head"*. Crypt Keys was built: the game and its 18 scripts, the scene builder
+  and map, the builder kit's additions, the book (16 chapters, using the shared concepts),
+  its PDF and cover, the spec, the READMEs and the website entry. Gate Guard's design
+  comes next.
+- **Gate Guard (1 to 2 October, from your phone through Remote Control):** you asked
+  to *"start from here the next game as he did"*. Its design version 1 was made the
+  Crypt Keys way: the sheet's packs downloaded and opened, the spec, the lab checks, and
+  the review page. You said *"Keep going here"*, then *"All 6 approved"*. Gate Guard was
+  built: the game and its 19 scripts, the scene builder and map, the book (16 chapters,
+  using the shared concepts), its PDF and cover, the spec, the READMEs, the credits and
+  the website entry. Nothing committed: you were asked whether to commit Crypt Keys first,
+  and haven't answered yet.
+- **Checking everything (2 October):** you answered *"Well, yes"*, said another session
+  had made the third game, asked to *"check everything"*, and added the
+  `COURSE_PW_LEVEL_3_CRYPT_KEYS` and `COURSE_PW_LEVEL_3_GATE_GUARD` secrets. With all
+  three games in one copy of the project: each builder's scene matches the one your
+  Editor built, and 43 play tests pass; every script version in the three books
+  compiles; the site builds with both new books published and encrypted. Found and fixed
+  in Gate Guard's book: Chapter 3 warns about the 56 import lines from
+  `Rig_Medium_General`, and Chapter 15's empty field has Unity's real message and
+  behaviour. Committed as three commits, not pushed.
 
 ---
 

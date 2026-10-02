@@ -107,6 +107,32 @@ export const levels = [
     protected: true,
     salt: '4e89439e94f09d592be7fccdf8c4b54f',
   },
+  {
+    slug: 'level-3-crypt-keys',
+    src: 'Assets/Levels/Level3-CryptKeys/Docs~/workbook/workbook.md',
+    shortName: 'Level 3 Crypt Keys',
+    introTitle: 'Before You Start',
+    sidebarLabel: 'Level 3 — Crypt Keys',
+    cardTitle: 'Level 3 — Crypt Keys',
+    cardDescription:
+      'Level 3 in 2D, seen from above: a crypt of six rooms, a warrior who faces four ways, skeletons and archers that think in states, keys, doors and chests, a boss in two phases, and torchlight in the dark. 16 build chapters and the 12 Level 3 C# Concept chapters, ending with practice for the Unity Certified User: Programmer exam.',
+    published: true,
+    protected: true,
+    salt: '6498eedb480b4bd2c4bbe806014524ea',
+  },
+  {
+    slug: 'level-3-gate-guard',
+    src: 'Assets/Levels/Level3-GateGuard/Docs~/workbook/workbook.md',
+    shortName: 'Level 3 Gate Guard',
+    introTitle: 'Before You Start',
+    sidebarLabel: 'Level 3 — Gate Guard',
+    cardTitle: 'Level 3 — Gate Guard',
+    cardDescription:
+      'Level 3 in 3D: a tower defence on a hex battlefield painted with the GameObject Brush. Skeletons with Humanoid Avatars rise and march, archers, catapults and frost mages share one Animator Controller, towers grow through three levels, and ten waves end at a castle gate. 16 build chapters and the 12 Level 3 C# Concept chapters, ending with practice for the Unity Certified User: Programmer exam.',
+    published: true,
+    protected: true,
+    salt: '4a222a4208fd7126f439718850c4857b',
+  },
 ];
 
 export const publishedLevels = levels.filter((l) => l.published);
