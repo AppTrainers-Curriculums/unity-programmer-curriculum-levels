@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Levels/Level2-TankArena/Scenes/TankArena.unity
+    guid: 9ef675b360ece457698352a9b5febf63
+  - enabled: 1
     path: Assets/Levels/Level3-CryptKeys/Scenes/CryptKeys.unity
     guid: 161d9b037cebb4dda88dc2c31deeb12d
   - enabled: 1
